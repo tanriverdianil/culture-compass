@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Culture Compass — a just-in-time intercultural brief</title>
+<style>
+:root {
+  --paper: #FAFAF8;
+  --paper-2: #F2F1EC;
+  --ink: #1A1D21;
+  --ink-soft: #565B62;
+  --ink-faint: #8A8F96;
+  --slate: #4A6572;
+  --slate-deep: #37505C;
+  --amber: #C88A3D;
+  --amber-bg: #FBF3E7;
+  --sage: #6B8E7F;
+  --sage-bg: #EDF3F0;
+  --line: #E4E2DB;
+  --line-2: #D6D3CA;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(26,29,33,.04), 0 8px 24px rgba(26,29,33,.06);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font); background: var(--paper); color: var(--ink);
+  line-height: 1.55; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+
+/* Header */
+header { padding: 40px 0 8px; }
+.brand { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+.mark { width: 30px; height: 30px; flex: none; border: 1.5px solid var(--slate); border-radius: 50%; position: relative; }
+.mark::before { content: ""; position: absolute; inset: 0; margin: auto; width: 2px; height: 13px; background: var(--slate); transform: rotate(38deg); border-radius: 2px; }
+.mark::after { content: ""; position: absolute; inset: 0; margin: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
+.brand-name { font-size: 16px; font-weight: 650; letter-spacing: -0.02em; }
+.brand-name span { color: var(--ink-faint); font-weight: 500; }
+h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 680; letter-spacing: -0.03em; line-height: 1.12; margin-bottom: 12px; }
+.lede { font-size: 16px; color: var(--ink-soft); max-width: 60ch; }
+
+.framing { margin: 22px 0 4px; background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 13px 16px; font-size: 13.5px; color: var(--ink-soft); display: flex; gap: 10px; align-items: flex-start; }
+.framing b { color: var(--ink); font-weight: 600; }
+.framing .dot { color: var(--amber); font-size: 15px; line-height: 1.4; flex: none; }
+
+/* Steps */
+.step { margin-top: 34px; }
+.step-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.step-num { font-size: 12px; font-weight: 700; color: var(--slate); letter-spacing: 0.04em; }
+.step-title { font-size: 15px; font-weight: 620; }
+.step-hint { font-size: 13px; color: var(--ink-faint); margin-left: auto; }
+.step-sub { font-size: 13px; color: var(--ink-faint); margin-bottom: 14px; }
+
+/* Culture grid — one flat list */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 9px; margin-top: 8px; }
+.chip {
+  display: flex; align-items: center; gap: 9px; background: #fff;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 11px 13px; cursor: pointer; font-size: 14px; font-weight: 520;
+  color: var(--ink); transition: border-color .15s, background .15s, transform .08s;
+  text-align: left; width: 100%;
+}
+.chip:hover { border-color: var(--line-2); background: var(--paper); }
+.chip:active { transform: translateY(1px); }
+.chip .flag { width: 22px; height: 15px; flex: none; border-radius: 2.5px; overflow: hidden; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.12); display: block; }
+.chip .flag svg { width: 100%; height: 100%; display: block; }
+.chip.active { border-color: var(--slate); background: var(--slate); color: #fff; box-shadow: 0 3px 10px rgba(74,101,114,.22); }
+.chip.active .flag { box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.3); }
+
+/* "You" perspective — compact select row */
+.you-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; }
+.you-label { font-size: 13.5px; color: var(--ink-soft); }
+.you-label b { color: var(--ink); font-weight: 600; }
+.you-select { flex: 1; min-width: 180px; }
+select {
+  width: 100%; font-family: var(--font); font-size: 14px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line-2); border-radius: 8px;
+  padding: 9px 11px; cursor: pointer; -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238A8F96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center; padding-right: 30px;
+}
+select:focus-visible { outline: 2px solid var(--slate); outline-offset: 1px; }
+
+/* Scenario grid */
+.scen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 9px; margin-top: 8px; }
+.scen { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 13px 14px; cursor: pointer; text-align: left; transition: border-color .15s, background .15s, transform .08s; }
+.scen:hover { border-color: var(--line-2); }
+.scen:active { transform: translateY(1px); }
+.scen .top { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+.scen .icon { font-size: 16px; }
+.scen .name { font-size: 14px; font-weight: 600; }
+.scen .blurb { font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
+.scen.active { border-color: var(--slate); background: var(--sage-bg); }
+.scen.active .name { color: var(--slate-deep); }
+
+/* Brief */
+#brief { margin-top: 8px; }
+.brief-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-top: 20px; animation: rise .35s cubic-bezier(.2,.7,.3,1); }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.brief-top { padding: 20px 22px 18px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--paper) 0%, #fff 100%); }
+.brief-crumb { font-size: 12.5px; color: var(--ink-faint); display: flex; align-items: center; gap: 7px; margin-bottom: 9px; flex-wrap: wrap; }
+.brief-crumb b { color: var(--slate-deep); font-weight: 600; }
+.brief-crumb .sep { color: var(--line-2); }
+.brief-title { font-size: 21px; font-weight: 680; letter-spacing: -0.02em; }
+.brief-tagline { font-size: 14px; color: var(--ink-soft); margin-top: 5px; }
+.brief-body { padding: 20px 22px; }
+.brief-guide { font-size: 15.5px; line-height: 1.62; color: var(--ink); }
+
+.brief-note { margin-top: 16px; background: var(--sage-bg); border-left: 3px solid var(--sage); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 15px; font-size: 13.5px; color: var(--ink-soft); }
+.brief-note b { color: var(--sage); font-weight: 650; }
+
+/* Friction block (only when "you" set) */
+.friction { margin-top: 22px; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+.friction-h { background: var(--slate); color: #fff; padding: 11px 16px; font-size: 13.5px; font-weight: 620; display: flex; align-items: center; gap: 8px; }
+.friction-h .persp { margin-left: auto; font-weight: 500; font-size: 12px; opacity: .85; }
+.friction-list { padding: 6px 16px 14px; }
+.friction-item { display: flex; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink); line-height: 1.5; }
+.friction-item:last-child { border-bottom: none; }
+.friction-item .arrow { color: var(--slate); font-weight: 700; flex: none; line-height: 1.5; }
+
+/* Dimensions */
+.dims { margin-top: 22px; }
+.dims-h { font-size: 11.5px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); margin-bottom: 12px; }
+.dim { padding: 13px 0; border-top: 1px solid var(--line); }
+.dim:last-child { border-bottom: 1px solid var(--line); }
+.dim-row { display: flex; align-items: baseline; gap: 8px; justify-content: space-between; margin-bottom: 5px; }
+.dim-label { font-size: 13.5px; font-weight: 560; color: var(--ink); }
+.dim-src { font-size: 10.5px; color: var(--ink-faint); border: 1px solid var(--line); border-radius: 20px; padding: 1px 8px; white-space: nowrap; letter-spacing: 0.02em; }
+.dim-val { font-size: 13px; color: var(--slate-deep); font-weight: 560; margin-bottom: 9px; }
+
+/* scaled dimension track with poles + markers */
+.scale-wrap { position: relative; padding-top: 18px; }
+.scale-track { height: 6px; background: var(--paper-2); border-radius: 4px; position: relative; }
+.scale-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--slate); border-radius: 4px; opacity: .28; }
+.scale-them { position: absolute; top: 50%; width: 15px; height: 15px; border-radius: 50%; background: var(--slate); border: 2.5px solid #fff; box-shadow: 0 1px 3px rgba(26,29,33,.25); transform: translate(-50%,-50%); z-index: 2; }
+.scale-you { position: absolute; top: 50%; width: 15px; height: 15px; border-radius: 50%; background: var(--amber); border: 2.5px solid #fff; box-shadow: 0 1px 3px rgba(26,29,33,.25); transform: translate(-50%,-50%); z-index: 2; }
+.marker-tag { position: absolute; top: -2px; font-size: 10.5px; font-weight: 650; transform: translateX(-50%); white-space: nowrap; }
+.marker-tag.them { color: var(--slate-deep); }
+.marker-tag.you { color: var(--amber); }
+.scale-poles { display: flex; justify-content: space-between; margin-top: 8px; }
+.scale-poles span { font-size: 11px; color: var(--ink-faint); }
+.scale-poles span:last-child { text-align: right; }
+.legend { display: flex; gap: 16px; margin-top: 2px; margin-bottom: 4px; }
+.legend span { font-size: 11px; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 5px; }
+.legend .d { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.legend .d.them { background: var(--slate); }
+.legend .d.you { background: var(--amber); }
+
+/* Off-ramp */
+.offramp { margin-top: 22px; background: var(--amber-bg); border: 1px solid #EFDFC7; border-radius: var(--radius-sm); padding: 15px 17px; }
+.offramp-h { font-size: 13.5px; font-weight: 650; color: var(--amber); display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.offramp p { font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+.offramp ul { list-style: none; display: grid; gap: 6px; }
+.offramp li { font-size: 12.8px; color: var(--ink-soft); padding-left: 16px; position: relative; line-height: 1.45; }
+.offramp li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--amber); }
+
+/* Empty */
+.empty { margin-top: 22px; border: 1px dashed var(--line-2); border-radius: var(--radius); padding: 30px 22px; text-align: center; color: var(--ink-faint); font-size: 14px; }
+.empty b { color: var(--ink-soft); font-weight: 600; display: block; margin-bottom: 3px; font-size: 15px; }
+
+footer { margin: 44px 0 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-faint); line-height: 1.6; }
+footer b { color: var(--ink-soft); font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+.chip:focus-visible, .scen:focus-visible { outline: 2px solid var(--slate); outline-offset: 2px; }
+@media (max-width: 480px) {
+  header { padding-top: 28px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
+  .brief-body, .brief-top { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div class="brand-name">Culture Compass</div>
+    </div>
+    <h1>Work across cultures with more awareness.</h1>
+    <p class="lede">A practical guide for business interactions across cultures. Pick who you're dealing with and the situation, and get a quick, grounded brief for the moment before you engage — so you go in prepared, not guessing.</p>
+
+    <div class="framing">
+      <span class="dot">◆</span>
+      <div><b>These are tendencies, not labels.</b> Everything here describes patterns observed at group level — a starting hypothesis to test, never a prediction about the individual in front of you. Read the person, not the passport.</div>
+    </div>
+  </header>
+
+  <!-- STEP 1: who -->
+  <section class="step">
+    <div class="step-head">
+      <span class="step-num">01</span>
+      <span class="step-title">Who are you dealing with?</span>
+      <span class="step-hint" id="hint1">Select one</span>
+    </div>
+    <div class="step-sub">The colleague, partner or customer on the other side.</div>
+    <div class="grid" id="cultures"></div>
+  </section>
+
+  <!-- STEP 2: you (optional) -->
+  <section class="step">
+    <div class="step-head">
+      <span class="step-num">02</span>
+      <span class="step-title">Reading from your perspective <span style="font-weight:500;color:var(--ink-faint)">— optional</span></span>
+    </div>
+    <div class="step-sub">Traits like "direct" or "punctual" are relative to where you stand. Pick the culture you feel closest to, and the brief adds tailored tips on adjusting your approach.</div>
+    <div class="you-row">
+      <span class="you-label"><b>My perspective:</b></span>
+      <div class="you-select">
+        <select id="youSelect" aria-label="The culture you feel closest to">
+          <option value="">Neutral / skip</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3: scenario -->
+  <section class="step">
+    <div class="step-head">
+      <span class="step-num">03</span>
+      <span class="step-title">What's the situation?</span>
+      <span class="step-hint">Select one</span>
+    </div>
+    <div class="scen-grid" id="scenarios"></div>
+  </section>
+
+  <!-- BRIEF -->
+  <section id="brief"></section>
+
+  <footer>
+    <b>Culture Compass</b> — a just-in-time intercultural brief. Content draws on Geert Hofstede's cultural dimensions, Erin Meyer's Culture Map, and Edward T. Hall's high/low-context theory. Frameworks describe group-level tendencies and are offered as preparation, not stereotype. Always defer to the individual and the specific context.
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================
+   CULTURE COMPASS — CONTENT DATASET
+   Grounded in: Hofstede's cultural dimensions, Erin Meyer's
+   Culture Map, Edward T. Hall's high/low context theory.
+   All content expresses GROUP-LEVEL TENDENCIES, not predictions
+   about individuals. See the "off-ramp" variables in app.js.
+   ============================================================ */
+
+/* Which layer each culture belongs to (for the UI grouping):
+   "in-ch"  = common expat populations living/working in Switzerland
+   "partner"= cultures Swiss companies commonly work with abroad
+   Some belong to both. */
+
+/* ============================================================
+   SVG FLAGS — hand-drawn, render identically on every platform
+   (unlike emoji flags, which fail on many desktop browsers).
+   Each is a compact viewBox="0 0 30 20" SVG string.
+   Fiddly flags (UK, US, IN, AE, BR) are clean, recognizable
+   approximations rather than pixel-perfect heraldry.
+   ============================================================ */
+const FLAGS = {
+  ch: `<svg viewBox="0 0 20 20"><rect width="20" height="20" fill="#D52B1E"/><rect x="8.2" y="4" width="3.6" height="12" fill="#fff"/><rect x="4" y="8.2" width="12" height="3.6" fill="#fff"/></svg>`,
+
+  de: `<svg viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.34" width="30" height="6.66" fill="#FFCE00"/></svg>`,
+
+  fr: `<svg viewBox="0 0 30 20"><rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ED2939"/></svg>`,
+
+  it: `<svg viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>`,
+
+  uk: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#012169"/><path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0L30 20M30 0L0 20" stroke="#C8102E" stroke-width="2"/><rect x="12.5" width="5" height="20" fill="#fff"/><rect y="7.5" width="30" height="5" fill="#fff"/><rect x="13.5" width="3" height="20" fill="#C8102E"/><rect y="8.5" width="30" height="3" fill="#C8102E"/></svg>`,
+
+  us: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect width="30" height="2.85" y="0" fill="#B22234"/><rect width="30" height="2.85" y="5.7" fill="#B22234"/><rect width="30" height="2.85" y="11.4" fill="#B22234"/><rect width="30" height="2.85" y="17.15" fill="#B22234"/><rect width="30" height="2.85" y="2.85" fill="#fff"/><rect width="30" height="2.85" y="8.55" fill="#fff"/><rect width="30" height="2.85" y="14.25" fill="#fff"/><rect width="13" height="11.4" fill="#3C3B6E"/><g fill="#fff"><circle cx="2.5" cy="2" r="0.7"/><circle cx="6.5" cy="2" r="0.7"/><circle cx="10.5" cy="2" r="0.7"/><circle cx="4.5" cy="4.5" r="0.7"/><circle cx="8.5" cy="4.5" r="0.7"/><circle cx="2.5" cy="7" r="0.7"/><circle cx="6.5" cy="7" r="0.7"/><circle cx="10.5" cy="7" r="0.7"/><circle cx="4.5" cy="9.5" r="0.7"/><circle cx="8.5" cy="9.5" r="0.7"/></g></svg>`,
+
+  in: `<svg viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#FF9933"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.34" width="30" height="6.66" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width="0.5"/><circle cx="15" cy="10" r="0.5" fill="#000080"/></svg>`,
+
+  pt: `<svg viewBox="0 0 30 20"><rect width="12" height="20" fill="#046A38"/><rect x="12" width="18" height="20" fill="#DA020E"/><circle cx="12" cy="10" r="3.2" fill="#FFE900" stroke="#fff" stroke-width="0.4"/><circle cx="12" cy="10" r="2" fill="#fff"/><circle cx="12" cy="10" r="1.6" fill="#DA020E"/></svg>`,
+
+  es: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#AA151B"/><rect y="5" width="30" height="10" fill="#F1BF00"/></svg>`,
+
+  al: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#E41E20"/><path d="M15 5.5c-1.2 0-1.8.8-1.5 1.6.2.6.9.8 1.5.8s1.3-.2 1.5-.8c.3-.8-.3-1.6-1.5-1.6zm-4 2.2l1.6 1.2-.6 1.9 1.6-1.2 1.6 1.2-.6-1.9L18 7.7l-2-.05-.6-1.9-.6 1.9-2 .05zm-1.5 3.3c1 1.8 3 3 5.5 3s4.5-1.2 5.5-3c-1.4 1-3.3 1.6-5.5 1.6s-4.1-.6-5.5-1.6z" fill="#000"/></svg>`,
+
+  tr: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#E30A17"/><circle cx="11" cy="10" r="5" fill="#fff"/><circle cx="12.6" cy="10" r="4" fill="#E30A17"/><path d="M17.4 10l-2.9 0.95 1.8-2.45v3l-1.8-2.45z" fill="#fff"/></svg>`,
+
+  cn: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#DE2910"/><path d="M6 3.5l0.9 2.7-2.3-1.7h2.8l-2.3 1.7z" fill="#FFDE00"/><g fill="#FFDE00"><path d="M11 2.5l0.4 1-1-0.6h1.2l-1 0.6z"/><path d="M13 4.5l0.4 1-1-0.6h1.2l-1 0.6z"/><path d="M13 7.5l0.4 1-1-0.6h1.2l-1 0.6z"/><path d="M11 9.5l0.4 1-1-0.6h1.2l-1 0.6z"/></g></svg>`,
+
+  jp: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="5.5" fill="#BC002D"/></svg>`,
+
+  ae: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#009739"/><rect y="13.34" width="30" height="6.66" fill="#000"/><rect width="8" height="20" fill="#EF3340"/></svg>`,
+
+  br: `<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#009B3A"/><path d="M15 3l11 7-11 7-11-7z" fill="#FEDF00"/><circle cx="15" cy="10" r="4" fill="#002776"/><path d="M11.3 9.2a4 4 0 0 1 7.4 1.2" fill="none" stroke="#fff" stroke-width="0.7"/></svg>`,
+
+  nl: `<svg viewBox="0 0 30 20"><rect width="30" height="6.67" fill="#AE1C28"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><rect y="13.34" width="30" height="6.66" fill="#21468B"/></svg>`
+};
+
+
+const CULTURES = {
+  ch: {
+    name: "Switzerland",
+    flag: "🇨🇭",
+    layers: ["in-ch", "partner"],
+    tagline: "The local baseline — precise, private, consensus-seeking.",
+    note: "Switzerland is itself multicultural: German-speaking regions lean more direct and structured, French-speaking (Romandie) somewhat warmer and more relationship-led, Italian-speaking (Ticino) more expressive. Treat 'Swiss' as a starting point, then adjust for region.",
+    dims: { directness: 3, context: "low", hierarchy: 2, timing: 1, decisions: "consensus", trust: "task" },
+    scenarios: {
+      firstMeeting: "Punctuality is respect — arrive on time, not early. Expect a firm handshake, surname + title until invited otherwise. Small talk is brief and neutral (weather, travel, not personal life). Getting straight to the agenda is welcomed, not cold.",
+      negotiation: "Fact-driven and thorough. Decisions are rarely made in the room — expect careful review and internal consensus first. Pressure tactics and hard-selling backfire. Reliability and precise follow-through win more than charisma.",
+      feedback: "Direct but composed. Criticism is given plainly and without drama; it's about the work, not the person. Over-praising reads as insincere. If a Swiss colleague is quiet, it's often consideration, not disapproval.",
+      email: "Formal, structured, complete. Use titles and full sentences. State the purpose clearly and early. Replies may be measured rather than instant — that's diligence, not disinterest.",
+      hierarchy: "Relatively flat in daily interaction but respectful of expertise and role. Consensus matters; decisions that skip stakeholders will stall. Managers consult before deciding.",
+      meetings: "Start and end on time, agenda followed closely. Preparation is expected. Interruptions are rare; people speak in turn. Actions and owners are noted — vague outcomes are frowned upon."
+    }
+  },
+
+  de: {
+    name: "Germany",
+    flag: "🇩🇪",
+    layers: ["in-ch", "partner"],
+    tagline: "Direct, structured, and comfortable separating task from relationship.",
+    dims: { directness: 5, context: "low", hierarchy: 3, timing: 1, decisions: "structured", trust: "task" },
+    scenarios: {
+      firstMeeting: "Punctual to the minute. Handshake, surname and title (Herr/Frau + Dr. if applicable). Business first; personal warmth comes later, once trust is earned. Directness is a sign of respect, not rudeness.",
+      negotiation: "Rigorous, detail-heavy, and logic-led. Come with data and a thorough case. Expect probing questions and challenges — this is engagement, not hostility. Decisions follow careful analysis, not gut feel.",
+      feedback: "Very direct. Negative feedback is explicit and given without softening cushions. Don't read bluntness as anger. Wrapping criticism in excessive positives can obscure your actual point.",
+      email: "Precise and formal. Clear subject, structured body, correct titles. Germans value completeness over speed. Ambiguity is disliked — say exactly what you need.",
+      hierarchy: "Roles and responsibilities are clearly defined. Respect the chain, but expertise carries real weight. Decisions can be centralized at the top even in flat-looking structures.",
+      meetings: "Agenda-driven and disciplined. Start on time, stay on topic. Debate is welcome and can be pointed; it targets ideas, not people. Decisions are documented and expected to be followed."
+    }
+  },
+
+  fr: {
+    name: "France",
+    flag: "🇫🇷",
+    layers: ["in-ch", "partner"],
+    tagline: "Intellectually rigorous, relationship-aware, comfortable with debate.",
+    dims: { directness: 4, context: "mid", hierarchy: 4, timing: 2, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "A degree of formality and a little relationship-building before business. Title + surname. Some intellectual sparring is normal and even enjoyed. A slightly later start is not unusual, but you should still be on time.",
+      negotiation: "Debate is a feature, not a breakdown. Expect challenge, counter-argument, and a taste for well-reasoned positions. Relationships and the quality of your logic both matter. Decisions often rest with a senior figure.",
+      feedback: "Direct in substance, delivered with more rhetorical care than in Germany. Critique can be pointed. Disagreement voiced openly is a sign of engagement, not disrespect.",
+      email: "Formal, with correct courtesies (Monsieur/Madame, proper sign-offs). Well-structured argument is appreciated. Slightly more formal than you'd expect from the spoken tone.",
+      hierarchy: "Fairly hierarchical. The senior person's authority is real, and decisions concentrate near the top. Going around a manager is poorly received.",
+      meetings: "Meetings can be a forum for discussion and idea-testing rather than only decision-confirmation. Expect articulate debate. Final calls may come after, from the top."
+    }
+  },
+
+  it: {
+    name: "Italy",
+    flag: "🇮🇹",
+    layers: ["in-ch", "partner"],
+    tagline: "Warm, expressive, relationship-first — trust is personal.",
+    dims: { directness: 3, context: "mid", hierarchy: 4, timing: 3, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Warm greetings, personal connection matters early. Some small talk about life, food, region is welcome. Relationships open doors that pure competence alone won't. Dress well — presentation carries meaning.",
+      negotiation: "Relationship-led. Trust in you as a person underpins the deal. Expressiveness, flexibility, and a bit of give-and-take are normal. Rigid, purely transactional approaches feel cold.",
+      feedback: "More indirect than Germany or Switzerland, especially in public. Criticism is softened and often delivered privately to protect the relationship and dignity. Read tone and context, not just words.",
+      email: "Warmer and more personal than Northern European norms, but still professional. A courteous opening matters. Relationship cues carry weight alongside the content.",
+      hierarchy: "Hierarchical; seniority and personal authority matter. Decisions concentrate at the top, and personal relationships with decision-makers count.",
+      meetings: "Can be more fluid — start times flexible, conversation lively, some overlapping speech. Passion and animation are engagement, not conflict. Structure may be looser than you're used to."
+    }
+  },
+
+  uk: {
+    name: "United Kingdom",
+    flag: "🇬🇧",
+    layers: ["in-ch", "partner"],
+    tagline: "Polite, understated, indirect — meaning often sits between the lines.",
+    dims: { directness: 2, context: "mid", hierarchy: 3, timing: 2, decisions: "structured", trust: "task" },
+    scenarios: {
+      firstMeeting: "Friendly small talk (weather, travel, sport) eases into business. Politeness and understatement are the register. Humour, including self-deprecation, is a social lubricant and a trust signal.",
+      negotiation: "Understated and relationship-aware. A 'yes, but I wonder if...' often means 'no.' Read the coded language: 'quite good' may mean 'disappointing,' 'with respect' may precede disagreement. Diplomacy over bluntness.",
+      feedback: "Indirect and cushioned. Criticism arrives wrapped in positives and softeners ('might just want to consider...'). Take the underlying message seriously even when the wrapping is gentle.",
+      email: "Polite, with softeners ('just', 'perhaps', 'when you get a chance'). Warmth and courtesy matter. Being too blunt can read as aggressive.",
+      hierarchy: "Moderately hierarchical but egalitarian in tone. Managers consult and understate their authority. Class and status cues exist but are rarely made explicit.",
+      meetings: "Orderly and polite. Overt conflict is avoided; disagreement is coded and diplomatic. Consensus is sought without heavy formality. Silence may signal reservation."
+    }
+  },
+
+  us: {
+    name: "United States",
+    flag: "🇺🇸",
+    layers: ["in-ch", "partner"],
+    tagline: "Fast, friendly, direct on task — informal but results-focused.",
+    dims: { directness: 4, context: "low", hierarchy: 2, timing: 1, decisions: "top-down", trust: "task" },
+    scenarios: {
+      firstMeeting: "Friendly and informal quickly — first names, easy rapport, upbeat small talk. But warmth is not yet deep friendship. Get to business fairly fast; time is money.",
+      negotiation: "Fast-paced and results-oriented. Optimism, enthusiasm, and a clear value proposition sell. Decisions can be quick and made by an empowered individual. 'Let's move forward' can come sooner than Europeans expect.",
+      feedback: "Positive framing first ('feedback sandwich'), then the issue. Praise is frequent and enthusiastic. Negative feedback is softened relative to Germany but more openly given than in the UK.",
+      email: "Direct, concise, action-oriented. First names, friendly but efficient. Quick replies are normal and expected.",
+      hierarchy: "Egalitarian in style — first names up and down the org — but decisions are often made decisively by whoever owns them. Challenging the boss's idea is more acceptable than in France or Italy.",
+      meetings: "Energetic, participative, action-focused. Everyone's input invited; interrupting to add ideas is often fine. Ends with clear next steps and owners."
+    }
+  },
+
+  in: {
+    name: "India",
+    flag: "🇮🇳",
+    layers: ["in-ch", "partner"],
+    tagline: "Relationship-driven, hierarchical, and diplomatically indirect.",
+    dims: { directness: 2, context: "high", hierarchy: 5, timing: 3, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Warm, relationship-first. Personal rapport and some small talk about family, background, travel build trust. Respect for seniority and age is signalled early. Titles matter.",
+      negotiation: "Relationship and trust underpin the deal. Flexibility and patience help; timelines can be fluid. A direct 'no' is often avoided — 'we'll try' or 'let me see' may signal difficulty. Read indirect cues.",
+      feedback: "Indirect, especially upward or in public. Saving face is important — critical feedback is best given privately and gently. Public criticism can damage the relationship badly.",
+      email: "Often more formal and deferential, particularly toward seniors. Courtesy and respect markers matter. Clarity helps, but blunt directness can feel abrasive.",
+      hierarchy: "Strongly hierarchical. Seniority commands deference; decisions flow from the top. Junior colleagues may not openly disagree with a senior in the room. Route requests through the right level.",
+      meetings: "Senior voices lead; juniors may stay quiet out of respect. 'Yes' can mean 'I hear you,' not 'I agree.' Build in follow-up to confirm real alignment. Relationship warmth oils the process."
+    }
+  },
+
+  pt: {
+    name: "Portugal",
+    flag: "🇵🇹",
+    layers: ["in-ch"],
+    tagline: "Warm, courteous, relationship-aware, and moderately formal.",
+    dims: { directness: 2, context: "mid", hierarchy: 4, timing: 3, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Courteous and personable. A little relationship-building precedes business. Politeness and respect for seniority are valued. Warmth is genuine but professional.",
+      negotiation: "Relationship-led and patient. Trust matters and builds over time. Avoid rushing or high-pressure tactics. Personal rapport smooths the path.",
+      feedback: "Indirect and tactful, mindful of dignity. Criticism is softened and often given privately. Harsh public feedback is poorly received.",
+      email: "Formal and courteous, with proper titles and greetings. Warmer in tone than Northern Europe. Politeness signals respect.",
+      hierarchy: "Hierarchical; respect for seniority and position. Decisions concentrate toward the top. Deference to age and rank is common.",
+      meetings: "Relationship warmth alongside business. Start times can be a little flexible. Senior figures carry the room; open disagreement is muted."
+    }
+  },
+
+  es: {
+    name: "Spain",
+    flag: "🇪🇸",
+    layers: ["in-ch"],
+    tagline: "Sociable, expressive, relationship-first, with flexible timing.",
+    dims: { directness: 3, context: "mid", hierarchy: 4, timing: 4, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Warm and sociable. Personal connection and some small talk come before business. Relationships are the foundation of trust. Expect expressiveness and animated conversation.",
+      negotiation: "Personal trust drives deals. Face-to-face contact matters. Flexibility and patience help; a purely transactional style feels cold. Passion and warmth are normal.",
+      feedback: "Softened relative to Northern Europe, and dignity-aware, but can be quite frank among established relationships. Private is safer for anything critical.",
+      email: "Warm and courteous, less formal than France once rapport exists. Personal touches are welcome. Relationship tone matters alongside content.",
+      hierarchy: "Hierarchical; the senior person's authority is real. Decisions concentrate at the top. Personal relationships with decision-makers carry weight.",
+      meetings: "Lively and social, with overlapping speech and animation. Start times flexible. Passion signals engagement. Structure may feel looser than Swiss norms."
+    }
+  },
+
+  cn: {
+    name: "China",
+    flag: "🇨🇳",
+    layers: ["partner"],
+    tagline: "Relationship (guanxi) and face are central; communication is high-context.",
+    dims: { directness: 1, context: "high", hierarchy: 5, timing: 3, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Relationship and respect come first. Exchange business cards with both hands and a moment of attention. Respect seniority visibly. Patience and a long-term view signal seriousness.",
+      negotiation: "Trust and guanxi (relationship networks) underpin everything. Expect a slower, relationship-building phase. Avoid causing anyone to lose face. Decisions come from the top and can take time; patience is strategic.",
+      feedback: "Highly indirect. Face-saving is paramount — never criticize someone in front of others. Negative messages are implied, delegated, or delivered privately and gently. Read silence and hesitation carefully.",
+      email: "Formal and respectful of rank. Directness can feel aggressive. Relationship warmth and courtesy matter. Responses may route through hierarchy.",
+      hierarchy: "Strongly hierarchical. Seniority and position command clear deference. Decisions flow top-down; juniors rarely contradict seniors openly. Address the right level.",
+      meetings: "Senior figures speak and decide; juniors observe. Harmony is protected in the room. 'Yes' may mean acknowledgment, not agreement. Real decisions often happen outside the meeting."
+    }
+  },
+
+  jp: {
+    name: "Japan",
+    flag: "🇯🇵",
+    layers: ["partner"],
+    tagline: "Consensus-driven, high-context, and deeply attentive to harmony and face.",
+    dims: { directness: 1, context: "high", hierarchy: 5, timing: 1, decisions: "consensus", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Formal and respectful. Business cards (meishi) exchanged with both hands and studied respectfully. Punctuality is essential. Silence and pauses are comfortable and meaningful — don't rush to fill them.",
+      negotiation: "Consensus-based (nemawashi — quiet groundwork before decisions). Expect a slow, thorough process involving many stakeholders. Harmony and face are protected. A soft answer may mask a firm 'no.'",
+      feedback: "Extremely indirect. Direct criticism is avoided to preserve harmony and face. Concerns are hinted at or raised privately through intermediaries. What's unsaid can matter more than what's said.",
+      email: "Formal, polite, and careful. Humility and proper courtesies matter. Bluntness is jarring. Expect measured, considered replies rather than instant ones.",
+      hierarchy: "Strongly hierarchical and seniority-based. Deference to rank and age is clear. Decisions require broad internal alignment before they're voiced.",
+      meetings: "Often for confirming decisions already shaped beforehand. Silence signals thought, not emptiness. Open disagreement is rare in the room. Harmony is actively protected."
+    }
+  },
+
+  ae: {
+    name: "United Arab Emirates",
+    flag: "🇦🇪",
+    layers: ["partner"],
+    tagline: "Relationship- and honor-based, hierarchical, with warm hospitality.",
+    dims: { directness: 2, context: "high", hierarchy: 5, timing: 4, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Hospitality and personal rapport come first — accept tea/coffee, allow generous small talk. Respect for seniority and status is important. Relationships precede and outlast any single deal.",
+      negotiation: "Trust and personal relationship are the foundation. Expect a relationship-building phase before substance. Patience matters; timelines are flexible. Decisions rest with senior figures and can't be rushed.",
+      feedback: "Indirect and honor-conscious. Never criticize publicly — it causes loss of face. Critical points are best raised privately, gently, and via trusted relationships.",
+      email: "Courteous, respectful of titles and rank. Warm relationship framing helps. Directness without relationship can feel abrupt.",
+      hierarchy: "Strongly hierarchical; status, age, and position command respect. Decisions come from the top. Address seniors appropriately and route through the right level.",
+      meetings: "May start late and run flexibly; interruptions (calls, side conversations) can occur and aren't rude. Senior figures lead. Relationship warmth underpins outcomes."
+    }
+  },
+
+  br: {
+    name: "Brazil",
+    flag: "🇧🇷",
+    layers: ["partner"],
+    tagline: "Warm, expressive, deeply relationship-driven, with flexible time.",
+    dims: { directness: 2, context: "high", hierarchy: 4, timing: 4, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Warm, personal, and expressive. Generous small talk and genuine personal interest build the trust that business depends on. Physical warmth (closer distance, touch on the arm) is normal.",
+      negotiation: "Relationships are everything — people do business with people they like and trust. Expect a slower, warmer build-up. Flexibility and patience help. Purely transactional approaches feel cold and stall.",
+      feedback: "Indirect and relationship-protective. Criticism is softened and given privately. Preserving warmth and dignity matters more than bluntness.",
+      email: "Warm, personal, and friendly. Relationship cues matter as much as content. Formality relaxes quickly once rapport exists.",
+      hierarchy: "Hierarchical; seniority and personal authority matter. Decisions concentrate at the top, and personal ties to decision-makers count.",
+      meetings: "Lively, social, and flexible on time. Overlapping conversation and animation are engagement. Relationship-building often precedes the actual agenda."
+    }
+  },
+
+  nl: {
+    name: "Netherlands",
+    flag: "🇳🇱",
+    layers: ["partner"],
+    tagline: "Exceptionally direct and egalitarian — frankness is a virtue.",
+    dims: { directness: 5, context: "low", hierarchy: 1, timing: 1, decisions: "consensus", trust: "task" },
+    scenarios: {
+      firstMeeting: "Friendly, informal, and quickly to the point. First names common. Minimal hierarchy on display. Frankness is normal and welcomed — don't mistake it for rudeness.",
+      negotiation: "Very direct and content-driven. Expect open, blunt disagreement and a strong egalitarian streak — anyone may challenge anyone. Decisions are consensus-based ('polder model'), so buy-in matters.",
+      feedback: "Among the most direct in the world. Criticism is explicit, immediate, and unvarnished — and not personal. Softening too much can obscure your message entirely.",
+      email: "Direct, concise, and low on ceremony. Say exactly what you mean. Over-politeness can read as evasive.",
+      hierarchy: "Highly egalitarian. Titles matter little; the best argument wins regardless of rank. Juniors openly challenge seniors. Consensus is sought broadly.",
+      meetings: "Open, egalitarian debate. Everyone contributes and disagreement is voiced plainly. Consensus-seeking means decisions can take discussion, but buy-in is genuine once reached."
+    }
+  },
+
+  al: {
+    name: "Albania",
+    flag: "🇦🇱",
+    layers: ["in-ch"],
+    tagline: "Relationship-first and hospitable, with hierarchy and word-of-honour (besa) at the core.",
+    note: "Two cultural anchors run deep: besa (keeping your word — a verbal commitment carries real weight) and mikpritje (hospitality). Younger and diaspora Albanians often blend these with the norms of wherever they've settled.",
+    dims: { directness: 3, context: "mid", hierarchy: 4, timing: 3, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Warm and personal. Expect friendly questions about family, health, and life before business — skipping this reads as cold and transactional. Accepting coffee or hospitality is part of building the relationship, not a detour from it. Arrive on time yourself, even if others run a little late.",
+      negotiation: "Trust and personal relationship come first; deals rarely close in the first meeting. Albanians can be firm negotiators but flexible once trust is established. A given word (besa) carries real weight — sometimes more than paperwork. Patience and genuine rapport pay off.",
+      feedback: "Mixed: fairly direct and frank on operational or technical matters, but more diplomatic and face-aware with superiors or on sensitive topics. Anything critical lands better privately. Read tone and body language — expressiveness is normal, and a raised voice is engagement, not anger.",
+      email: "Courteous and reasonably formal, especially toward seniors (use titles — Zoti/Zonja). But important matters are preferred face-to-face; email is for routine follow-up. Confirm key points in writing after the personal conversation.",
+      hierarchy: "Clearly hierarchical, with strong respect for seniority, age, and titles. Decisions come from the top, often in family-run or founder-led firms where personal authority is central. Address and greet the most senior person first.",
+      meetings: "Often open with genuine social conversation over coffee. Can run formally in official settings but flexibly on time in informal ones. Expressive, animated discussion is normal; interruptions are part of the rhythm, not rudeness. Confirm decisions clearly, as verbal agreement is meaningful."
+    }
+  },
+
+  tr: {
+    name: "Turkey",
+    flag: "🇹🇷",
+    layers: ["in-ch"],
+    tagline: "Warm, relationship-driven, and hierarchical — communication is high-context.",
+    note: "Turkey bridges European and Middle Eastern business norms; Istanbul corporate culture can feel more Western, while relationships, hierarchy, and hospitality remain central across the board.",
+    dims: { directness: 2, context: "high", hierarchy: 4, timing: 3, decisions: "top-down", trust: "relationship" },
+    scenarios: {
+      firstMeeting: "Relationship and warmth first. Expect tea or coffee and genuine personal conversation before business — this ritual is part of the deal, not small talk to rush through. Respect for age and seniority is signalled early; greet and address the most senior person first, with titles.",
+      negotiation: "Trust underpins everything and takes time to build; expect a relationship-building phase and multiple meetings. Bargaining is expected and expressive. A soft or indirect answer may mask a 'no.' Decisions come from the top, so ensure the real decision-maker is in the room.",
+      feedback: "Indirect, to protect harmony and face. Direct criticism — especially in public or toward a senior — is poorly received. Deliver anything critical privately, gently, and wrapped in respect. Read what's implied as much as what's said.",
+      email: "Formal and respectful of rank and title. Warm relationship framing helps; pure bluntness can feel abrupt. Face-to-face or a call is preferred for anything important, with email confirming afterward.",
+      hierarchy: "Strongly hierarchical (high power distance). The senior figure is often a paternal authority; power is centralized and juniors expect direction rather than openly challenging superiors. Route requests through the right level and show visible respect for position.",
+      meetings: "Senior voices lead; juniors may stay quiet out of respect. Warm, expressive, and relationship-oriented, with flexible timing. Harmony is protected, so open disagreement is muted — real positions may surface privately afterward. Hospitality frames the whole encounter."
+    }
+  }
+};
+
+/* Scenario definitions — the "situations" a user picks. */
+const SCENARIOS = [
+  { key: "firstMeeting", label: "First meeting", icon: "🤝", blurb: "Making a strong first impression" },
+  { key: "negotiation",  label: "Negotiating",   icon: "⚖️", blurb: "Deals, contracts, buy-in" },
+  { key: "feedback",     label: "Giving feedback", icon: "💬", blurb: "Critique, reviews, difficult messages" },
+  { key: "email",        label: "Writing / email", icon: "✉️", blurb: "Tone and register in writing" },
+  { key: "hierarchy",    label: "Hierarchy & decisions", icon: "🏛️", blurb: "Who decides, and how" },
+  { key: "meetings",     label: "Meetings",       icon: "📋", blurb: "Running or joining a meeting" }
+];
+
+/* Dimension display metadata + which framework each nods to (subtle source tags). */
+const DIM_META = {
+  directness: {
+    label: "Directness of communication",
+    source: "Meyer · Hall",
+    poles: ["Indirect", "Very direct"],
+    scale: ["Very indirect", "Indirect", "Balanced", "Direct", "Very direct"],
+    describe: v => DIM_META.directness.scale[v - 1]
+  },
+  context: {
+    label: "Communication context",
+    source: "Hall",
+    map: { low: "Low-context — meaning is explicit, in the words", mid: "Mixed context", high: "High-context — meaning sits in tone, relationship, what's unsaid" }
+  },
+  hierarchy: {
+    label: "Attitude to hierarchy",
+    source: "Hofstede · power distance",
+    poles: ["Egalitarian", "Strongly hierarchical"],
+    scale: ["Very flat", "Flat", "Moderate", "Hierarchical", "Strongly hierarchical"],
+    describe: v => DIM_META.hierarchy.scale[v - 1]
+  },
+  timing: {
+    label: "Relationship to time",
+    source: "Hall · Meyer",
+    poles: ["Strict / punctual", "Fluid"],
+    scale: ["Strictly linear / punctual", "Punctual", "Fairly flexible", "Flexible", "Very fluid"],
+    describe: v => DIM_META.timing.scale[v - 1]
+  },
+  decisions: {
+    label: "How decisions are made",
+    source: "Meyer",
+    map: { consensus: "Consensus — broad buy-in before deciding", structured: "Structured — analysis then decision", "top-down": "Top-down — senior figures decide" }
+  },
+  trust: {
+    label: "How trust is built",
+    source: "Meyer",
+    map: { task: "Task-based — trust through reliable work", relationship: "Relationship-based — trust through personal connection" }
+  }
+};
+
+/* ------------------------------------------------------------
+   FRICTION LOGIC (one-directional, action-focused).
+   Given YOUR perspective and THEIR culture, produce concrete
+   "adjust your approach" points based on the gap between the
+   two on each dimension. Only meaningful gaps produce a point.
+   ------------------------------------------------------------ */
+const CONTEXT_RANK = { low: 1, mid: 2, high: 3 };
+const TIMING_WORD = { 1: "very punctual", 2: "punctual", 3: "fairly flexible on time", 4: "flexible on time", 5: "very fluid on time" };
+
+function frictionPoints(youCode, themCode) {
+  const you = CULTURES[youCode].dims;
+  const them = CULTURES[themCode].dims;
+  const themName = CULTURES[themCode].name;
+  const points = [];
+
+  // Directness (1-5)
+  const dDir = them.directness - you.directness;
+  if (dDir <= -2) points.push(`You're more direct than is typical here. Soften critical points, avoid a flat 'no', and watch for meaning that sits between the lines — bluntness can cost you.`);
+  else if (dDir >= 2) points.push(`They tend to be more direct than you may expect. Take frank feedback at face value, not as aggression, and be more explicit about what you actually need.`);
+
+  // Context low/mid/high
+  const dCtx = CONTEXT_RANK[them.context] - CONTEXT_RANK[you.context];
+  if (dCtx >= 2) points.push(`Communication is higher-context than you're used to — a lot is carried in tone, relationship, and what's left unsaid. Listen for the implied message and confirm understanding gently.`);
+  else if (dCtx <= -2) points.push(`They rely on explicit, spelled-out communication. Don't expect them to read between the lines — say things plainly and completely.`);
+
+  // Hierarchy (1-5)
+  const dHier = them.hierarchy - you.hierarchy;
+  if (dHier >= 2) points.push(`Hierarchy matters more here than in your default. Show visible respect for seniority and titles, greet the most senior person first, and route decisions through the right level.`);
+  else if (dHier <= -2) points.push(`This is flatter than you may assume. Titles carry little weight; juniors may challenge openly and expect to be heard. Don't lean on rank — the best argument wins.`);
+
+  // Timing (1-5)
+  const dTime = them.timing - you.timing;
+  if (dTime >= 2) points.push(`Time is handled more fluidly than you'd expect (${TIMING_WORD[them.timing]}). Build in slack, don't read a late start as disrespect, and let relationship-building take the time it needs.`);
+  else if (dTime <= -2) points.push(`Punctuality and schedules are taken more strictly here. Be on time to the minute and keep to the agenda — running late or loose reads as unprofessional.`);
+
+  // Trust basis
+  if (you.trust !== them.trust) {
+    if (them.trust === "relationship") points.push(`Trust here is built through personal relationship, not just reliable delivery. Invest in rapport first — accept the coffee, the small talk, the slower start. The deal follows the relationship.`);
+    else points.push(`Trust here is earned mainly through competent, reliable delivery rather than personal closeness. Let consistent follow-through — not warmth — do the work; over-familiarity can feel beside the point.`);
+  }
+
+  // Decision style
+  if (you.decisions !== them.decisions) {
+    if (them.decisions === "top-down") points.push(`Decisions concentrate at the top. Make sure the actual decision-maker is engaged; buy-in from your peer-level contact may not be enough to move things.`);
+    else if (them.decisions === "consensus") points.push(`Decisions need broad buy-in, not just the boss's yes. Expect a slower process and involve stakeholders early — a decision without consensus tends to stall.`);
+    else if (them.decisions === "structured") points.push(`Decisions follow careful analysis. Come with thorough data and detail; pushing for a fast, gut-feel 'yes' will work against you.`);
+  }
+
+  if (points.length === 0) {
+    points.push(`Your default style and theirs are broadly aligned on the big dimensions — fewer structural surprises. Still read the individual: personality and background vary widely within any culture.`);
+  }
+  return points;
+}
+
+/* The anti-stereotype "off-ramp" variables — shown in every brief. */
+const OFF_RAMP = [
+  "Years lived or worked abroad, and international exposure",
+  "Generation — younger professionals often converge toward global norms",
+  "Industry culture (a startup engineer ≠ a private banker of the same nationality)",
+  "Their specific company's internal culture",
+  "Education abroad or in an international environment",
+  "Individual personality and communication style",
+  "Whether you're speaking their native language or a shared second one",
+  "Whether they're themselves a cultural 'bridge' between worlds"
+];
+
+</script>
+<script>
+(function () {
+  const state = { culture: null, you: "", scenario: null };
+  const cultcontainer = document.getElementById('cultures');
+  const scencontainer = document.getElementById('scenarios');
+  const youSelect = document.getElementById('youSelect');
+  const briefEl = document.getElementById('brief');
+
+  // Flat, alphabetical-by-name culture list
+  const codes = Object.keys(CULTURES).sort((a,b) =>
+    CULTURES[a].name.localeCompare(CULTURES[b].name));
+
+  // Build chips
+  codes.forEach(code => {
+    const c = CULTURES[code];
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.setAttribute('data-code', code);
+    btn.innerHTML = `<span class="flag">${FLAGS[code]}</span><span>${c.name}</span>`;
+    btn.addEventListener('click', () => selectCulture(code));
+    cultcontainer.appendChild(btn);
+    // populate "you" dropdown (native <option> can't render SVG, so text only)
+    const opt = document.createElement('option');
+    opt.value = code; opt.textContent = c.name;
+    youSelect.appendChild(opt);
+  });
+
+  // Build scenarios
+  SCENARIOS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'scen';
+    btn.setAttribute('data-scen', s.key);
+    btn.innerHTML = `<div class="top"><span class="icon">${s.icon}</span><span class="name">${s.label}</span></div><div class="blurb">${s.blurb}</div>`;
+    btn.addEventListener('click', () => selectScenario(s.key));
+    scencontainer.appendChild(btn);
+  });
+
+  function selectCulture(code) {
+    state.culture = code;
+    document.querySelectorAll('.chip').forEach(el =>
+      el.classList.toggle('active', el.getAttribute('data-code') === code));
+    document.getElementById('hint1').textContent = CULTURES[code].name;
+    // if "you" equals the target, clear it (comparing a culture to itself is pointless)
+    if (state.you === code) { state.you = ""; youSelect.value = ""; }
+    render();
+  }
+  function selectScenario(key) {
+    state.scenario = key;
+    document.querySelectorAll('.scen').forEach(el =>
+      el.classList.toggle('active', el.getAttribute('data-scen') === key));
+    render();
+  }
+  youSelect.addEventListener('change', e => {
+    state.you = e.target.value;
+    render();
+  });
+
+  function dimReadout(dims, youDims) {
+    const rows = [];
+    const hasYou = !!youDims;
+    [['directness'],['hierarchy'],['timing']].forEach(([k]) => {
+      const meta = DIM_META[k]; const v = dims[k];
+      const themPct = (v - 1) / 4 * 100;
+      const themTag = `<span class="marker-tag them" style="left:${themPct}%">${hasYou ? 'Them' : ''}</span>`;
+      let youMarker = '', youTag = '';
+      if (hasYou) {
+        const yv = youDims[k];
+        const youPct = (yv - 1) / 4 * 100;
+        const overlap = Math.abs(youPct - themPct) < 9;
+        youMarker = `<span class="scale-you" style="left:${youPct}%"></span>`;
+        youTag = `<span class="marker-tag you" style="left:${youPct}%; top:${overlap ? '-16px' : '-2px'}">You</span>`;
+      }
+      rows.push(`
+        <div class="dim">
+          <div class="dim-row"><span class="dim-label">${meta.label}</span><span class="dim-src">${meta.source}</span></div>
+          <div class="dim-val">${meta.describe(v)}</div>
+          <div class="scale-wrap">
+            <div class="scale-track">
+              <div class="scale-fill" style="width:${themPct}%"></div>
+              ${youMarker}
+              <span class="scale-them" style="left:${themPct}%"></span>
+            </div>
+            ${themTag}${youTag}
+            <div class="scale-poles"><span>${meta.poles[0]}</span><span>${meta.poles[1]}</span></div>
+          </div>
+        </div>`);
+    });
+    [['context'],['decisions'],['trust']].forEach(([k]) => {
+      const meta = DIM_META[k]; const v = dims[k];
+      rows.push(`
+        <div class="dim">
+          <div class="dim-row"><span class="dim-label">${meta.label}</span><span class="dim-src">${meta.source}</span></div>
+          <div class="dim-val" style="margin-bottom:0">${meta.map[v]}</div>
+        </div>`);
+    });
+    return rows.join('');
+  }
+
+  function frictionBlock() {
+    if (!state.you || state.you === state.culture) return '';
+    const pts = frictionPoints(state.you, state.culture);
+    const youC = CULTURES[state.you];
+    return `
+      <div class="friction">
+        <div class="friction-h">
+          <span>◆ How to adjust your approach</span>
+          <span class="persp">your lens: ${youC.flag} ${youC.name}</span>
+        </div>
+        <div class="friction-list">
+          ${pts.map(p => `<div class="friction-item"><span class="arrow">→</span><span>${p}</span></div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function render() {
+    if (!state.culture || !state.scenario) {
+      briefEl.innerHTML = `<div class="empty"><b>Your brief will appear here.</b>Choose who you're dealing with and the situation.</div>`;
+      return;
+    }
+    const c = CULTURES[state.culture];
+    const s = SCENARIOS.find(x => x.key === state.scenario);
+    const guide = c.scenarios[state.scenario];
+    const youDims = (state.you && state.you !== state.culture) ? CULTURES[state.you].dims : null;
+    const noteHTML = c.note ? `<div class="brief-note"><b>Worth knowing.</b> ${c.note}</div>` : '';
+
+    briefEl.innerHTML = `
+      <div class="brief-card">
+        <div class="brief-top">
+          <div class="brief-crumb">
+            <span>${s.icon} ${s.label}</span><span class="sep">with</span><b>${c.flag} ${c.name}</b>
+          </div>
+          <div class="brief-title">${s.label} · ${c.name}</div>
+          <div class="brief-tagline">${c.tagline}</div>
+        </div>
+        <div class="brief-body">
+          <p class="brief-guide">${guide}</p>
+          ${noteHTML}
+          ${frictionBlock()}
+          <div class="dims">
+            <div class="dims-h">The cultural read</div>
+            ${youDims ? `<div class="legend"><span><span class="d them"></span>Them (${c.name})</span><span><span class="d you"></span>You (${CULTURES[state.you].name})</span></div>` : ''}
+            ${dimReadout(c.dims, youDims)}
+          </div>
+          <div class="offramp">
+            <div class="offramp-h">◆ Before you apply any of this</div>
+            <p>The more of these that describe the person, the less their nationality predicts. Use the brief to prepare — then adjust fast to who's actually in front of you.</p>
+            <ul>${OFF_RAMP.map(o => `<li>${o}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>`;
+    briefEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
