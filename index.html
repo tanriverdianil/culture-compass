@@ -34,7 +34,16 @@ body {
 
 /* Header */
 header { padding: 40px 0 8px; }
-.brand { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.brand { display: flex; align-items: center; gap: 11px; }
+.lang-picker select {
+  font-family: var(--font); font-size: 13px; font-weight: 500; color: var(--ink);
+  background: #fff; border: 1px solid var(--line-2); border-radius: 8px;
+  padding: 7px 30px 7px 12px; cursor: pointer; -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238A8F96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+}
+.lang-picker select:focus-visible { outline: 2px solid var(--slate); outline-offset: 1px; }
 .mark { width: 30px; height: 30px; flex: none; border: 1.5px solid var(--slate); border-radius: 50%; position: relative; }
 .mark::before { content: ""; position: absolute; inset: 0; margin: auto; width: 2px; height: 13px; background: var(--slate); transform: rotate(38deg); border-radius: 2px; }
 .mark::after { content: ""; position: absolute; inset: 0; margin: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
@@ -178,16 +187,26 @@ footer b { color: var(--ink-soft); font-weight: 600; }
 <div class="wrap">
 
   <header>
-    <div class="brand">
-      <div class="mark" aria-hidden="true"></div>
-      <div class="brand-name">Culture Compass</div>
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div class="brand-name" id="brandName">Culture Compass</div>
+      </div>
+      <div class="lang-picker">
+        <select id="langSelect" aria-label="Language">
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+        </select>
+      </div>
     </div>
-    <h1>Work across cultures with more awareness.</h1>
-    <p class="lede">A practical guide for business interactions across cultures. Pick who you're dealing with and the situation, and get a quick, grounded brief for the moment before you engage — so you go in prepared, not guessing.</p>
+    <h1 id="h1">Work across cultures with more awareness.</h1>
+    <p class="lede" id="lede">A practical guide for business interactions across cultures. Pick who you're dealing with and the situation, and get a quick, grounded brief for the moment before you engage — so you go in prepared, not guessing.</p>
 
     <div class="framing">
       <span class="dot">◆</span>
-      <div><b>These are tendencies, not labels.</b> Everything here describes patterns observed at group level — a starting hypothesis to test, never a prediction about the individual in front of you. Read the person, not the passport.</div>
+      <div><b id="framingBold">These are tendencies, not labels.</b> <span id="framingText">Everything here describes patterns observed at group level — a starting hypothesis to test, never a prediction about the individual in front of you. Read the person, not the passport.</span></div>
     </div>
   </header>
 
@@ -195,10 +214,10 @@ footer b { color: var(--ink-soft); font-weight: 600; }
   <section class="step">
     <div class="step-head">
       <span class="step-num">01</span>
-      <span class="step-title">Who are you dealing with?</span>
+      <span class="step-title" id="step1">Who are you dealing with?</span>
       <span class="step-hint" id="hint1">Select one</span>
     </div>
-    <div class="step-sub">The colleague, partner or customer on the other side.</div>
+    <div class="step-sub" id="step1sub">The colleague, partner or customer on the other side.</div>
     <div class="grid" id="cultures"></div>
   </section>
 
@@ -206,11 +225,11 @@ footer b { color: var(--ink-soft); font-weight: 600; }
   <section class="step">
     <div class="step-head">
       <span class="step-num">02</span>
-      <span class="step-title">Reading from your perspective <span style="font-weight:500;color:var(--ink-faint)">— optional</span></span>
+      <span class="step-title"><span id="step2">Reading from your perspective</span> <span style="font-weight:500;color:var(--ink-faint)" id="step2opt">— optional</span></span>
     </div>
-    <div class="step-sub">Traits like "direct" or "punctual" are relative to where you stand. Pick the culture you feel closest to, and the brief adds tailored tips on adjusting your approach.</div>
+    <div class="step-sub" id="step2sub">Traits like "direct" or "punctual" are relative to where you stand. Pick the culture you feel closest to, and the brief adds tailored tips on adjusting your approach.</div>
     <div class="you-row">
-      <span class="you-label"><b>My perspective:</b></span>
+      <span class="you-label"><b id="myPerspective">My perspective:</b></span>
       <div class="you-select">
         <select id="youSelect" aria-label="The culture you feel closest to">
           <option value="">Neutral / skip</option>
@@ -223,8 +242,8 @@ footer b { color: var(--ink-soft); font-weight: 600; }
   <section class="step">
     <div class="step-head">
       <span class="step-num">03</span>
-      <span class="step-title">What's the situation?</span>
-      <span class="step-hint">Select one</span>
+      <span class="step-title" id="step3">What's the situation?</span>
+      <span class="step-hint" id="hint3">Select one</span>
     </div>
     <div class="scen-grid" id="scenarios"></div>
   </section>
@@ -232,13 +251,895 @@ footer b { color: var(--ink-soft); font-weight: 600; }
   <!-- BRIEF -->
   <section id="brief"></section>
 
-  <footer>
+  <footer id="footer">
     <b>Culture Compass</b> — a just-in-time intercultural brief. Content draws on Geert Hofstede's cultural dimensions, Erin Meyer's Culture Map, and Edward T. Hall's high/low-context theory. Frameworks describe group-level tendencies and are offered as preparation, not stereotype. Always defer to the individual and the specific context.
   </footer>
 
 </div>
 
 <script>
+/* ===== i18n DATA BUNDLES ===== */
+/* ============================================================
+   i18n — INTERFACE STRINGS (the "chrome")
+   EN is the base/default. DE, FR, IT follow.
+   Culture briefs live separately in data-i18n content.
+   NOTE: translations should get a native-speaker review
+   before professional use — the credibility rests on nuance.
+   ============================================================ */
+const I18N = {
+  en: {
+    langName: "English",
+    brand: "Culture Compass",
+    h1: "Work across cultures with more awareness.",
+    lede: "A practical guide for business interactions across cultures. Pick who you're dealing with and the situation, and get a quick, grounded brief for the moment before you engage — so you go in prepared, not guessing.",
+    framingBold: "These are tendencies, not labels.",
+    framing: "Everything here describes patterns observed at group level — a starting hypothesis to test, never a prediction about the individual in front of you. Read the person, not the passport.",
+    step1: "Who are you dealing with?",
+    step1sub: "The colleague, partner or customer on the other side.",
+    step1hint: "Select one",
+    step2: "Reading from your perspective",
+    step2optional: "— optional",
+    step2sub: "Traits like \"direct\" or \"punctual\" are relative to where you stand. Pick the culture you feel closest to, and the brief adds tailored tips on adjusting your approach.",
+    myPerspective: "My perspective:",
+    neutralSkip: "Neutral / skip",
+    step3: "What's the situation?",
+    step3hint: "Select one",
+    emptyTitle: "Your brief will appear here.",
+    emptyBody: "Choose who you're dealing with and the situation.",
+    withWord: "with",
+    culturalRead: "The cultural read",
+    frictionTitle: "How to adjust your approach",
+    yourLens: "your lens:",
+    them: "Them",
+    you: "You",
+    worthKnowing: "Worth knowing.",
+    offrampTitle: "Before you apply any of this",
+    offrampIntro: "The more of these that describe the person, the less their nationality predicts. Use the brief to prepare — then adjust fast to who's actually in front of you.",
+    footer: "Culture Compass — a just-in-time intercultural brief. Content draws on Geert Hofstede's cultural dimensions, Erin Meyer's Culture Map, and Edward T. Hall's high/low-context theory. Frameworks describe group-level tendencies and are offered as preparation, not stereotype. Always defer to the individual and the specific context.",
+    langLabel: "Language"
+  },
+  de: {
+    langName: "Deutsch",
+    brand: "Culture Compass",
+    h1: "Kulturübergreifend arbeiten — mit mehr Bewusstsein.",
+    lede: "Ein praktischer Leitfaden für geschäftliche Interaktionen über Kulturen hinweg. Wählen Sie Ihr Gegenüber und die Situation, und erhalten Sie einen kurzen, fundierten Überblick für den Moment vor dem Gespräch — damit Sie vorbereitet hineingehen, statt zu raten.",
+    framingBold: "Das sind Tendenzen, keine Etiketten.",
+    framing: "Alles hier beschreibt Muster, die auf Gruppenebene beobachtet wurden — eine Ausgangshypothese zum Überprüfen, niemals eine Vorhersage über die Person vor Ihnen. Lesen Sie den Menschen, nicht den Pass.",
+    step1: "Mit wem haben Sie es zu tun?",
+    step1sub: "Die Kollegin, der Partner oder die Kundin auf der anderen Seite.",
+    step1hint: "Eine auswählen",
+    step2: "Aus Ihrer Perspektive betrachtet",
+    step2optional: "— optional",
+    step2sub: "Eigenschaften wie „direkt\" oder „pünktlich\" sind relativ zu Ihrem eigenen Standpunkt. Wählen Sie die Kultur, der Sie sich am nächsten fühlen, und der Überblick ergänzt massgeschneiderte Hinweise zur Anpassung Ihres Vorgehens.",
+    myPerspective: "Meine Perspektive:",
+    neutralSkip: "Neutral / überspringen",
+    step3: "Worum geht es in der Situation?",
+    step3hint: "Eine auswählen",
+    emptyTitle: "Ihr Überblick erscheint hier.",
+    emptyBody: "Wählen Sie Ihr Gegenüber und die Situation.",
+    withWord: "mit",
+    culturalRead: "Die kulturelle Einordnung",
+    frictionTitle: "So passen Sie Ihr Vorgehen an",
+    yourLens: "Ihre Perspektive:",
+    them: "Sie (Gegenüber)",
+    you: "Sie",
+    worthKnowing: "Gut zu wissen.",
+    offrampTitle: "Bevor Sie etwas davon anwenden",
+    offrampIntro: "Je mehr davon auf die Person zutrifft, desto weniger sagt ihre Nationalität aus. Nutzen Sie den Überblick zur Vorbereitung — und stellen Sie sich dann rasch auf die Person ein, die tatsächlich vor Ihnen steht.",
+    footer: "Culture Compass — ein Just-in-time-Überblick für interkulturelle Situationen. Die Inhalte stützen sich auf Geert Hofstedes Kulturdimensionen, Erin Meyers Culture Map und Edward T. Halls Theorie der High-/Low-Context-Kommunikation. Die Modelle beschreiben Tendenzen auf Gruppenebene und dienen der Vorbereitung, nicht dem Stereotyp. Massgeblich bleiben stets die einzelne Person und der konkrete Kontext.",
+    langLabel: "Sprache"
+  },
+  fr: {
+    langName: "Français",
+    brand: "Culture Compass",
+    h1: "Travailler entre cultures avec plus de conscience.",
+    lede: "Un guide pratique pour les interactions professionnelles entre cultures. Choisissez votre interlocuteur et la situation, et obtenez un aperçu bref et fondé pour le moment qui précède l'échange — afin d'y aller préparé, sans deviner.",
+    framingBold: "Ce sont des tendances, pas des étiquettes.",
+    framing: "Tout ceci décrit des schémas observés au niveau du groupe — une hypothèse de départ à vérifier, jamais une prédiction sur la personne en face de vous. Lisez la personne, pas le passeport.",
+    step1: "À qui avez-vous affaire ?",
+    step1sub: "Le collègue, le partenaire ou le client en face.",
+    step1hint: "Choisir un",
+    step2: "Selon votre perspective",
+    step2optional: "— facultatif",
+    step2sub: "Des traits comme « direct » ou « ponctuel » sont relatifs à votre propre position. Choisissez la culture dont vous vous sentez le plus proche, et l'aperçu ajoute des conseils sur mesure pour ajuster votre approche.",
+    myPerspective: "Ma perspective :",
+    neutralSkip: "Neutre / passer",
+    step3: "Quelle est la situation ?",
+    step3hint: "Choisir une",
+    emptyTitle: "Votre aperçu apparaîtra ici.",
+    emptyBody: "Choisissez votre interlocuteur et la situation.",
+    withWord: "avec",
+    culturalRead: "La lecture culturelle",
+    frictionTitle: "Comment ajuster votre approche",
+    yourLens: "votre perspective :",
+    them: "Eux",
+    you: "Vous",
+    worthKnowing: "Bon à savoir.",
+    offrampTitle: "Avant d'appliquer tout ceci",
+    offrampIntro: "Plus ces éléments décrivent la personne, moins sa nationalité est prédictive. Utilisez l'aperçu pour vous préparer — puis ajustez-vous vite à la personne réellement en face de vous.",
+    footer: "Culture Compass — un aperçu interculturel just-in-time. Le contenu s'appuie sur les dimensions culturelles de Geert Hofstede, la Culture Map d'Erin Meyer et la théorie des contextes forts/faibles d'Edward T. Hall. Ces modèles décrivent des tendances de groupe et servent à la préparation, non au stéréotype. La personne et le contexte précis priment toujours.",
+    langLabel: "Langue"
+  },
+  it: {
+    langName: "Italiano",
+    brand: "Culture Compass",
+    h1: "Lavorare tra culture con maggiore consapevolezza.",
+    lede: "Una guida pratica per le interazioni professionali tra culture. Scegli il tuo interlocutore e la situazione e ottieni una sintesi breve e fondata per il momento prima del confronto — così entri preparato, senza tirare a indovinare.",
+    framingBold: "Sono tendenze, non etichette.",
+    framing: "Tutto ciò descrive schemi osservati a livello di gruppo — un'ipotesi di partenza da verificare, mai una previsione sulla persona che hai davanti. Leggi la persona, non il passaporto.",
+    step1: "Con chi hai a che fare?",
+    step1sub: "Il collega, il partner o il cliente dall'altra parte.",
+    step1hint: "Selezionane uno",
+    step2: "Dalla tua prospettiva",
+    step2optional: "— facoltativo",
+    step2sub: "Tratti come \"diretto\" o \"puntuale\" sono relativi al punto in cui ti trovi tu. Scegli la cultura a cui ti senti più vicino e la sintesi aggiunge consigli su misura per adattare il tuo approccio.",
+    myPerspective: "La mia prospettiva:",
+    neutralSkip: "Neutro / salta",
+    step3: "Qual è la situazione?",
+    step3hint: "Selezionane una",
+    emptyTitle: "La tua sintesi apparirà qui.",
+    emptyBody: "Scegli il tuo interlocutore e la situazione.",
+    withWord: "con",
+    culturalRead: "La lettura culturale",
+    frictionTitle: "Come adattare il tuo approccio",
+    yourLens: "la tua prospettiva:",
+    them: "Loro",
+    you: "Tu",
+    worthKnowing: "Da sapere.",
+    offrampTitle: "Prima di applicare tutto questo",
+    offrampIntro: "Più questi elementi descrivono la persona, meno la sua nazionalità è predittiva. Usa la sintesi per prepararti — poi adàttati in fretta alla persona che hai davvero davanti.",
+    footer: "Culture Compass — una sintesi interculturale just-in-time. I contenuti si basano sulle dimensioni culturali di Geert Hofstede, sulla Culture Map di Erin Meyer e sulla teoria dei contesti alti/bassi di Edward T. Hall. Questi modelli descrivono tendenze di gruppo e servono alla preparazione, non allo stereotipo. Contano sempre la singola persona e il contesto specifico.",
+    langLabel: "Lingua"
+  }
+};
+
+/* Scenario labels + blurbs, per language. Keys match SCENARIOS. */
+const SCEN_I18N = {
+  en: {
+    firstMeeting: ["First meeting", "Making a strong first impression"],
+    negotiation:  ["Negotiating", "Deals, contracts, buy-in"],
+    feedback:     ["Giving feedback", "Critique, reviews, difficult messages"],
+    email:        ["Writing / email", "Tone and register in writing"],
+    hierarchy:    ["Hierarchy & decisions", "Who decides, and how"],
+    meetings:     ["Meetings", "Running or joining a meeting"]
+  },
+  de: {
+    firstMeeting: ["Erstes Treffen", "Einen starken ersten Eindruck machen"],
+    negotiation:  ["Verhandeln", "Abschlüsse, Verträge, Zustimmung"],
+    feedback:     ["Feedback geben", "Kritik, Beurteilungen, schwierige Botschaften"],
+    email:        ["Schreiben / E-Mail", "Ton und Register im Schriftlichen"],
+    hierarchy:    ["Hierarchie & Entscheidungen", "Wer entscheidet — und wie"],
+    meetings:     ["Meetings", "Ein Meeting leiten oder daran teilnehmen"]
+  },
+  fr: {
+    firstMeeting: ["Première rencontre", "Faire une forte première impression"],
+    negotiation:  ["Négocier", "Accords, contrats, adhésion"],
+    feedback:     ["Donner un retour", "Critique, évaluations, messages difficiles"],
+    email:        ["Écrire / e-mail", "Ton et registre à l'écrit"],
+    hierarchy:    ["Hiérarchie & décisions", "Qui décide, et comment"],
+    meetings:     ["Réunions", "Animer une réunion ou y participer"]
+  },
+  it: {
+    firstMeeting: ["Primo incontro", "Fare una buona prima impressione"],
+    negotiation:  ["Negoziare", "Accordi, contratti, consenso"],
+    feedback:     ["Dare un riscontro", "Critiche, valutazioni, messaggi difficili"],
+    email:        ["Scrivere / e-mail", "Tono e registro nello scritto"],
+    hierarchy:    ["Gerarchia e decisioni", "Chi decide, e come"],
+    meetings:     ["Riunioni", "Condurre una riunione o parteciparvi"]
+  }
+};
+
+/* Dimension labels, poles, value scales, and categorical maps — per language. */
+const DIM_I18N = {
+  en: {
+    directness: { label: "Directness of communication", poles: ["Indirect","Very direct"], scale: ["Very indirect","Indirect","Balanced","Direct","Very direct"] },
+    hierarchy:  { label: "Attitude to hierarchy", poles: ["Egalitarian","Strongly hierarchical"], scale: ["Very flat","Flat","Moderate","Hierarchical","Strongly hierarchical"] },
+    timing:     { label: "Relationship to time", poles: ["Strict / punctual","Fluid"], scale: ["Strictly linear / punctual","Punctual","Fairly flexible","Flexible","Very fluid"] },
+    context:    { label: "Communication context", map: { low:"Low-context — meaning is explicit, in the words", mid:"Mixed context", high:"High-context — meaning sits in tone, relationship, what's unsaid" } },
+    decisions:  { label: "How decisions are made", map: { consensus:"Consensus — broad buy-in before deciding", structured:"Structured — analysis then decision", "top-down":"Top-down — senior figures decide" } },
+    trust:      { label: "How trust is built", map: { task:"Task-based — trust through reliable work", relationship:"Relationship-based — trust through personal connection" } }
+  },
+  de: {
+    directness: { label: "Direktheit der Kommunikation", poles: ["Indirekt","Sehr direkt"], scale: ["Sehr indirekt","Indirekt","Ausgewogen","Direkt","Sehr direkt"] },
+    hierarchy:  { label: "Haltung zur Hierarchie", poles: ["Egalitär","Stark hierarchisch"], scale: ["Sehr flach","Flach","Mittel","Hierarchisch","Stark hierarchisch"] },
+    timing:     { label: "Verhältnis zur Zeit", poles: ["Strikt / pünktlich","Fliessend"], scale: ["Strikt linear / pünktlich","Pünktlich","Eher flexibel","Flexibel","Sehr fliessend"] },
+    context:    { label: "Kommunikationskontext", map: { low:"Low-Context — die Bedeutung liegt explizit in den Worten", mid:"Gemischter Kontext", high:"High-Context — die Bedeutung liegt im Ton, in der Beziehung, im Ungesagten" } },
+    decisions:  { label: "Wie Entscheidungen fallen", map: { consensus:"Konsens — breite Zustimmung vor der Entscheidung", structured:"Strukturiert — erst Analyse, dann Entscheidung", "top-down":"Top-down — die Führungsebene entscheidet" } },
+    trust:      { label: "Wie Vertrauen entsteht", map: { task:"Aufgabenbasiert — Vertrauen durch verlässliche Arbeit", relationship:"Beziehungsbasiert — Vertrauen durch persönliche Verbindung" } }
+  },
+  fr: {
+    directness: { label: "Franchise de la communication", poles: ["Indirect","Très direct"], scale: ["Très indirect","Indirect","Équilibré","Direct","Très direct"] },
+    hierarchy:  { label: "Rapport à la hiérarchie", poles: ["Égalitaire","Très hiérarchique"], scale: ["Très horizontal","Horizontal","Modéré","Hiérarchique","Très hiérarchique"] },
+    timing:     { label: "Rapport au temps", poles: ["Strict / ponctuel","Fluide"], scale: ["Strictement linéaire / ponctuel","Ponctuel","Assez flexible","Flexible","Très fluide"] },
+    context:    { label: "Contexte de communication", map: { low:"Contexte faible — le sens est explicite, dans les mots", mid:"Contexte mixte", high:"Contexte fort — le sens réside dans le ton, la relation, le non-dit" } },
+    decisions:  { label: "Comment les décisions se prennent", map: { consensus:"Consensus — large adhésion avant de décider", structured:"Structuré — analyse puis décision", "top-down":"Descendant — les responsables décident" } },
+    trust:      { label: "Comment se construit la confiance", map: { task:"Basée sur la tâche — la confiance vient d'un travail fiable", relationship:"Basée sur la relation — la confiance vient du lien personnel" } }
+  },
+  it: {
+    directness: { label: "Franchezza della comunicazione", poles: ["Indiretto","Molto diretto"], scale: ["Molto indiretto","Indiretto","Equilibrato","Diretto","Molto diretto"] },
+    hierarchy:  { label: "Atteggiamento verso la gerarchia", poles: ["Egualitario","Fortemente gerarchico"], scale: ["Molto piatto","Piatto","Moderato","Gerarchico","Fortemente gerarchico"] },
+    timing:     { label: "Rapporto con il tempo", poles: ["Rigoroso / puntuale","Fluido"], scale: ["Rigorosamente lineare / puntuale","Puntuale","Abbastanza flessibile","Flessibile","Molto fluido"] },
+    context:    { label: "Contesto comunicativo", map: { low:"Basso contesto — il significato è esplicito, nelle parole", mid:"Contesto misto", high:"Alto contesto — il significato sta nel tono, nella relazione, nel non detto" } },
+    decisions:  { label: "Come si prendono le decisioni", map: { consensus:"Consenso — ampia condivisione prima di decidere", structured:"Strutturato — prima l'analisi, poi la decisione", "top-down":"Dall'alto — decidono le figure senior" } },
+    trust:      { label: "Come si costruisce la fiducia", map: { task:"Basata sul compito — fiducia attraverso un lavoro affidabile", relationship:"Basata sulla relazione — fiducia attraverso il legame personale" } }
+  }
+};
+
+/* Off-ramp variables, per language. */
+const OFFRAMP_I18N = {
+  en: [
+    "Years lived or worked abroad, and international exposure",
+    "Generation — younger professionals often converge toward global norms",
+    "Industry culture (a startup engineer ≠ a private banker of the same nationality)",
+    "Their specific company's internal culture",
+    "Education abroad or in an international environment",
+    "Individual personality and communication style",
+    "Whether you're speaking their native language or a shared second one",
+    "Whether they're themselves a cultural 'bridge' between worlds"
+  ],
+  de: [
+    "Jahre im Ausland gelebt oder gearbeitet und internationale Erfahrung",
+    "Generation — jüngere Berufstätige nähern sich oft globalen Normen an",
+    "Branchenkultur (eine Startup-Ingenieurin ≠ ein Privatbankier gleicher Nationalität)",
+    "Die interne Kultur des konkreten Unternehmens",
+    "Ausbildung im Ausland oder in einem internationalen Umfeld",
+    "Individuelle Persönlichkeit und Kommunikationsstil",
+    "Ob Sie die Muttersprache der Person oder eine gemeinsame Zweitsprache sprechen",
+    "Ob die Person selbst eine kulturelle „Brücke\" zwischen Welten ist"
+  ],
+  fr: [
+    "Années vécues ou travaillées à l'étranger et exposition internationale",
+    "Génération — les jeunes professionnels convergent souvent vers des normes mondiales",
+    "Culture du secteur (une ingénieure de startup ≠ un banquier privé de même nationalité)",
+    "La culture interne propre à l'entreprise",
+    "Études à l'étranger ou dans un environnement international",
+    "Personnalité et style de communication propres",
+    "Si vous parlez sa langue maternelle ou une seconde langue commune",
+    "Si la personne est elle-même un « pont » culturel entre des mondes"
+  ],
+  it: [
+    "Anni vissuti o lavorati all'estero ed esposizione internazionale",
+    "Generazione — i professionisti più giovani convergono spesso verso norme globali",
+    "Cultura del settore (un'ingegnera di startup ≠ un banchiere privato della stessa nazionalità)",
+    "La cultura interna della specifica azienda",
+    "Studi all'estero o in un ambiente internazionale",
+    "Personalità e stile comunicativo individuali",
+    "Se parli la sua lingua madre o una seconda lingua condivisa",
+    "Se la persona è essa stessa un 'ponte' culturale tra mondi"
+  ]
+};
+
+/* ============================================================
+   FRICTION PHRASES — the "how to adjust your approach" points,
+   generated from the gap between YOUR lens and THEIR culture.
+   Each language provides the same set of templated phrases.
+   Keys are stable identifiers used by the friction function.
+   ============================================================ */
+const FRICTION_I18N = {
+  en: {
+    dir_soften: "You're more direct than is typical here. Soften critical points, avoid a flat 'no', and watch for meaning that sits between the lines — bluntness can cost you.",
+    dir_frank:  "They tend to be more direct than you may expect. Take frank feedback at face value, not as aggression, and be more explicit about what you actually need.",
+    ctx_high:   "Communication is higher-context than you're used to — a lot is carried in tone, relationship, and what's left unsaid. Listen for the implied message and confirm understanding gently.",
+    ctx_low:    "They rely on explicit, spelled-out communication. Don't expect them to read between the lines — say things plainly and completely.",
+    hier_more:  "Hierarchy matters more here than in your default. Show visible respect for seniority and titles, greet the most senior person first, and route decisions through the right level.",
+    hier_less:  "This is flatter than you may assume. Titles carry little weight; juniors may challenge openly and expect to be heard. Don't lean on rank — the best argument wins.",
+    time_fluid: "Time is handled more fluidly than you'd expect. Build in slack, don't read a late start as disrespect, and let relationship-building take the time it needs.",
+    time_strict:"Punctuality and schedules are taken more strictly here. Be on time to the minute and keep to the agenda — running late or loose reads as unprofessional.",
+    trust_rel:  "Trust here is built through personal relationship, not just reliable delivery. Invest in rapport first — accept the coffee, the small talk, the slower start. The deal follows the relationship.",
+    trust_task: "Trust here is earned mainly through competent, reliable delivery rather than personal closeness. Let consistent follow-through — not warmth — do the work; over-familiarity can feel beside the point.",
+    dec_top:    "Decisions concentrate at the top. Make sure the actual decision-maker is engaged; buy-in from your peer-level contact may not be enough to move things.",
+    dec_cons:   "Decisions need broad buy-in, not just the boss's yes. Expect a slower process and involve stakeholders early — a decision without consensus tends to stall.",
+    dec_struct: "Decisions follow careful analysis. Come with thorough data and detail; pushing for a fast, gut-feel 'yes' will work against you.",
+    aligned:    "Your default style and theirs are broadly aligned on the big dimensions — fewer structural surprises. Still read the individual: personality and background vary widely within any culture."
+  },
+  de: {
+    dir_soften: "Sie sind direkter, als es hier üblich ist. Entschärfen Sie kritische Punkte, vermeiden Sie ein glattes „Nein\" und achten Sie auf das, was zwischen den Zeilen steht — allzu grosse Direktheit kann Sie etwas kosten.",
+    dir_frank:  "Ihr Gegenüber ist tendenziell direkter, als Sie erwarten. Nehmen Sie offenes Feedback für bare Münze, nicht als Angriff, und sagen Sie deutlicher, was Sie tatsächlich brauchen.",
+    ctx_high:   "Die Kommunikation ist stärker kontextgebunden, als Sie es gewohnt sind — vieles liegt im Ton, in der Beziehung und im Ungesagten. Hören Sie auf die implizite Botschaft und vergewissern Sie sich behutsam, dass Sie richtig verstanden haben.",
+    ctx_low:    "Ihr Gegenüber setzt auf explizite, ausformulierte Kommunikation. Erwarten Sie nicht, dass zwischen den Zeilen gelesen wird — sagen Sie die Dinge klar und vollständig.",
+    hier_more:  "Hierarchie zählt hier mehr als in Ihrem Standard. Zeigen Sie sichtbaren Respekt vor Rang und Titeln, begrüssen Sie die ranghöchste Person zuerst und leiten Sie Entscheidungen über die richtige Ebene.",
+    hier_less:  "Es geht flacher zu, als Sie vielleicht annehmen. Titel zählen wenig; jüngere Mitarbeitende widersprechen offen und erwarten, gehört zu werden. Verlassen Sie sich nicht auf den Rang — das beste Argument gewinnt.",
+    time_fluid: "Mit Zeit wird flexibler umgegangen, als Sie erwarten würden. Planen Sie Puffer ein, deuten Sie einen späten Beginn nicht als Respektlosigkeit und lassen Sie dem Beziehungsaufbau die nötige Zeit.",
+    time_strict:"Pünktlichkeit und Zeitpläne werden hier strenger genommen. Seien Sie auf die Minute pünktlich und halten Sie sich an die Agenda — Verspätung oder Lockerheit wirkt unprofessionell.",
+    trust_rel:  "Vertrauen entsteht hier über die persönliche Beziehung, nicht nur über verlässliche Leistung. Investieren Sie zuerst in den Draht zueinander — nehmen Sie den Kaffee, den Smalltalk, den langsameren Einstieg an. Das Geschäft folgt der Beziehung.",
+    trust_task: "Vertrauen wird hier vor allem über kompetente, verlässliche Leistung erworben, weniger über persönliche Nähe. Lassen Sie beständige Zuverlässigkeit — nicht Herzlichkeit — die Arbeit tun; zu viel Vertraulichkeit kann fehl am Platz wirken.",
+    dec_top:    "Entscheidungen konzentrieren sich oben. Sorgen Sie dafür, dass die tatsächlich entscheidende Person eingebunden ist; die Zustimmung Ihres Ansprechpartners auf gleicher Ebene reicht oft nicht, um etwas zu bewegen.",
+    dec_cons:   "Entscheidungen brauchen breite Zustimmung, nicht nur das Ja der Chefin. Rechnen Sie mit einem langsameren Prozess und binden Sie die Beteiligten früh ein — eine Entscheidung ohne Konsens gerät leicht ins Stocken.",
+    dec_struct: "Entscheidungen folgen sorgfältiger Analyse. Kommen Sie mit gründlichen Daten und Details; auf ein schnelles Bauchgefühl-„Ja\" zu drängen, wirkt gegen Sie.",
+    aligned:    "Ihr Standardstil und der Ihres Gegenübers liegen bei den grossen Dimensionen weitgehend beieinander — weniger strukturelle Überraschungen. Lesen Sie dennoch die Person: Persönlichkeit und Hintergrund variieren innerhalb jeder Kultur stark."
+  },
+  fr: {
+    dir_soften: "Vous êtes plus direct que la norme ici. Adoucissez les points critiques, évitez un « non » sec et soyez attentif au sens qui se loge entre les lignes — trop de franchise peut vous coûter.",
+    dir_frank:  "Votre interlocuteur est souvent plus direct que vous ne l'imaginez. Prenez un retour franc au premier degré, non comme une agression, et soyez plus explicite sur ce dont vous avez réellement besoin.",
+    ctx_high:   "La communication est à contexte plus fort que ce à quoi vous êtes habitué — beaucoup passe par le ton, la relation et le non-dit. Écoutez le message implicite et vérifiez la compréhension avec délicatesse.",
+    ctx_low:    "Votre interlocuteur s'appuie sur une communication explicite et détaillée. N'attendez pas qu'on lise entre les lignes — dites les choses clairement et complètement.",
+    hier_more:  "La hiérarchie compte davantage ici que dans votre référence habituelle. Montrez un respect visible pour l'ancienneté et les titres, saluez d'abord la personne la plus haut placée et faites passer les décisions par le bon niveau.",
+    hier_less:  "C'est plus horizontal que vous ne le supposez. Les titres pèsent peu ; les plus juniors peuvent contester ouvertement et s'attendent à être entendus. Ne misez pas sur le rang — c'est le meilleur argument qui l'emporte.",
+    time_fluid: "Le temps se gère de façon plus souple que vous ne l'attendriez. Prévoyez de la marge, n'interprétez pas un démarrage tardif comme un manque de respect et laissez à la relation le temps de se construire.",
+    time_strict:"La ponctualité et les horaires sont pris plus strictement ici. Soyez à l'heure à la minute et tenez-vous à l'ordre du jour — arriver en retard ou rester flou paraît peu professionnel.",
+    trust_rel:  "Ici, la confiance se construit par la relation personnelle, pas seulement par une exécution fiable. Investissez d'abord dans le lien — acceptez le café, les échanges informels, un démarrage plus lent. L'affaire suit la relation.",
+    trust_task: "Ici, la confiance s'acquiert surtout par une exécution compétente et fiable plutôt que par la proximité personnelle. Laissez la constance — non la chaleur — faire le travail ; trop de familiarité peut sembler hors sujet.",
+    dec_top:    "Les décisions se concentrent au sommet. Assurez-vous que le véritable décideur est impliqué ; l'adhésion de votre interlocuteur de même niveau peut ne pas suffire à faire avancer les choses.",
+    dec_cons:   "Les décisions exigent une large adhésion, pas seulement le oui du chef. Attendez-vous à un processus plus lent et impliquez les parties prenantes tôt — une décision sans consensus a tendance à s'enliser.",
+    dec_struct: "Les décisions suivent une analyse minutieuse. Venez avec des données et des détails solides ; pousser pour un « oui » rapide et instinctif jouera contre vous.",
+    aligned:    "Votre style par défaut et le sien sont largement alignés sur les grandes dimensions — moins de surprises structurelles. Lisez tout de même la personne : personnalité et parcours varient beaucoup au sein d'une même culture."
+  },
+  it: {
+    dir_soften: "Sei più diretto di quanto sia tipico qui. Smussa i punti critici, evita un \"no\" secco e fai attenzione al significato che sta tra le righe — un'eccessiva schiettezza può costarti.",
+    dir_frank:  "Il tuo interlocutore tende a essere più diretto di quanto ti aspetti. Prendi un riscontro schietto per quello che è, non come aggressività, e sii più esplicito su ciò che ti serve davvero.",
+    ctx_high:   "La comunicazione è a contesto più alto di quanto tu sia abituato — molto passa attraverso il tono, la relazione e il non detto. Ascolta il messaggio implicito e verifica con delicatezza di aver capito.",
+    ctx_low:    "Il tuo interlocutore si affida a una comunicazione esplicita e dettagliata. Non aspettarti che legga tra le righe — di' le cose in modo chiaro e completo.",
+    hier_more:  "Qui la gerarchia conta più che nella tua impostazione abituale. Mostra rispetto visibile per anzianità e titoli, saluta per prima la persona più alta in grado e fai passare le decisioni dal livello giusto.",
+    hier_less:  "È più piatto di quanto tu possa supporre. I titoli pesano poco; i più giovani possono obiettare apertamente e si aspettano di essere ascoltati. Non contare sul grado — vince l'argomento migliore.",
+    time_fluid: "Il tempo è gestito in modo più fluido di quanto ti aspetteresti. Prevedi margine, non leggere un inizio in ritardo come mancanza di rispetto e lascia che la costruzione della relazione richieda il tempo necessario.",
+    time_strict:"Puntualità e orari sono presi più rigorosamente qui. Sii puntuale al minuto e attieniti all'ordine del giorno — arrivare in ritardo o restare vago appare poco professionale.",
+    trust_rel:  "Qui la fiducia si costruisce attraverso la relazione personale, non solo con una consegna affidabile. Investi prima nel rapporto — accetta il caffè, le chiacchiere, un avvio più lento. L'affare segue la relazione.",
+    trust_task: "Qui la fiducia si guadagna soprattutto con una consegna competente e affidabile, più che con la vicinanza personale. Lascia che sia la costanza — non il calore — a fare il lavoro; un'eccessiva confidenza può sembrare fuori luogo.",
+    dec_top:    "Le decisioni si concentrano al vertice. Assicurati che il vero decisore sia coinvolto; il consenso del tuo referente di pari livello può non bastare a muovere le cose.",
+    dec_cons:   "Le decisioni richiedono un ampio consenso, non solo il sì del capo. Aspettati un processo più lento e coinvolgi presto le parti interessate — una decisione senza consenso tende a incagliarsi.",
+    dec_struct: "Le decisioni seguono un'analisi accurata. Presentati con dati e dettagli approfonditi; spingere per un \"sì\" rapido e d'istinto ti si ritorcerà contro.",
+    aligned:    "Il tuo stile abituale e il suo sono in gran parte allineati sulle dimensioni principali — meno sorprese strutturali. Leggi comunque la persona: personalità e background variano molto all'interno di ogni cultura."
+  }
+};
+
+/* ============================================================
+   CULTURE CONTENT — GERMAN (de)
+   tagline, note (optional), and the 6 scenario briefs per culture.
+   Mirrors the structure of the English CULTURES data.
+   ============================================================ */
+const CONTENT_DE = {
+  ch: {
+    tagline: "Der lokale Bezugspunkt — präzise, zurückhaltend, auf Konsens bedacht.",
+    note: "Die Schweiz ist selbst mehrkulturell: Die Deutschschweiz gilt als eher direkt und strukturiert, die Romandie als etwas wärmer und stärker beziehungsorientiert, das Tessin als ausdrucksstärker. Nehmen Sie „die Schweiz\" als Ausgangspunkt und passen Sie nach Region an.",
+    scenarios: {
+      firstMeeting: "Pünktlichkeit ist Respekt — kommen Sie rechtzeitig, nicht zu früh. Rechnen Sie mit festem Händedruck, Nachname und Titel, bis man das Du anbietet. Smalltalk ist kurz und neutral (Wetter, Anreise, nicht das Privatleben). Direkt zur Sache zu kommen, ist willkommen, nicht kühl.",
+      negotiation: "Faktenorientiert und gründlich. Entscheidungen fallen selten im Raum — rechnen Sie mit sorgfältiger Prüfung und internem Konsens zuerst. Druck und hartes Verkaufen sind kontraproduktiv. Verlässlichkeit und präzise Umsetzung zählen mehr als Charisma.",
+      feedback: "Direkt, aber gefasst. Kritik wird sachlich und ohne Dramatik geäussert; es geht um die Sache, nicht um die Person. Übermässiges Loben wirkt unaufrichtig. Wenn eine Schweizer Kollegin schweigt, ist das oft Bedacht, nicht Ablehnung.",
+      email: "Formell, strukturiert, vollständig. Verwenden Sie Titel und ganze Sätze. Nennen Sie den Zweck klar und früh. Antworten kommen eher überlegt als sofort — das ist Sorgfalt, kein Desinteresse.",
+      hierarchy: "Im Alltag relativ flach, aber mit Respekt vor Fachwissen und Rolle. Konsens zählt; Entscheidungen, die Beteiligte übergehen, geraten ins Stocken. Führungskräfte beraten sich, bevor sie entscheiden.",
+      meetings: "Pünktlich beginnen und enden, Agenda wird eng verfolgt. Vorbereitung wird erwartet. Unterbrechungen sind selten; man spricht der Reihe nach. Massnahmen und Verantwortliche werden festgehalten — vage Ergebnisse sind verpönt."
+    }
+  },
+  de: {
+    tagline: "Direkt, strukturiert und in der Lage, Sache und Beziehung zu trennen.",
+    scenarios: {
+      firstMeeting: "Auf die Minute pünktlich. Händedruck, Nachname und Titel (Herr/Frau + ggf. Dr.). Zuerst das Geschäft; persönliche Wärme kommt später, wenn Vertrauen gewachsen ist. Direktheit ist ein Zeichen von Respekt, nicht von Unhöflichkeit.",
+      negotiation: "Gründlich, detailreich und logikgetrieben. Kommen Sie mit Daten und einer fundierten Argumentation. Rechnen Sie mit kritischen Rückfragen und Widerspruch — das ist Beteiligung, keine Feindseligkeit. Entscheidungen folgen sorgfältiger Analyse, nicht dem Bauchgefühl.",
+      feedback: "Sehr direkt. Negatives Feedback wird ausdrücklich und ohne beschönigende Polster gegeben. Deuten Sie Klarheit nicht als Ärger. Kritik in zu viel Lob zu verpacken, kann Ihre eigentliche Botschaft verdecken.",
+      email: "Präzise und formell. Klarer Betreff, strukturierter Text, korrekte Titel. Vollständigkeit zählt mehr als Tempo. Mehrdeutigkeit ist unerwünscht — sagen Sie genau, was Sie brauchen.",
+      hierarchy: "Rollen und Zuständigkeiten sind klar definiert. Respektieren Sie den Dienstweg, aber Fachwissen hat echtes Gewicht. Entscheidungen können auch in flach wirkenden Strukturen an der Spitze zentralisiert sein.",
+      meetings: "Agenda-getrieben und diszipliniert. Pünktlicher Start, beim Thema bleiben. Debatte ist erwünscht und kann pointiert sein; sie zielt auf Ideen, nicht auf Personen. Entscheidungen werden dokumentiert und ihre Umsetzung erwartet."
+    }
+  },
+  fr: {
+    tagline: "Intellektuell anspruchsvoll, beziehungsbewusst, der Debatte zugetan.",
+    scenarios: {
+      firstMeeting: "Eine gewisse Förmlichkeit und etwas Beziehungsaufbau vor dem Geschäft. Titel + Nachname. Ein intellektuelles Kräftemessen ist normal und wird sogar geschätzt. Ein leicht späterer Beginn ist nicht ungewöhnlich, dennoch sollten Sie pünktlich sein.",
+      negotiation: "Debatte ist ein Merkmal, kein Zusammenbruch. Rechnen Sie mit Widerspruch, Gegenargumenten und einer Vorliebe für gut begründete Positionen. Beziehungen und die Qualität Ihrer Logik zählen beide. Entscheidungen liegen oft bei einer ranghohen Person.",
+      feedback: "In der Sache direkt, in der Form rhetorisch feiner als in Deutschland. Kritik kann pointiert sein. Offen geäusserter Widerspruch ist ein Zeichen von Beteiligung, nicht von Respektlosigkeit.",
+      email: "Formell, mit korrekten Höflichkeitsformeln (Monsieur/Madame, passende Grussformeln). Eine gut aufgebaute Argumentation wird geschätzt. Etwas förmlicher, als der gesprochene Ton vermuten lässt.",
+      hierarchy: "Recht hierarchisch. Die Autorität der ranghohen Person ist real, und Entscheidungen konzentrieren sich nahe der Spitze. Den Vorgesetzten zu umgehen, kommt schlecht an.",
+      meetings: "Meetings können ein Forum für Diskussion und das Prüfen von Ideen sein, nicht nur zur Bestätigung von Entscheidungen. Rechnen Sie mit eloquenter Debatte. Die endgültige Entscheidung kann später von oben kommen."
+    }
+  },
+  it: {
+    tagline: "Herzlich, ausdrucksstark, beziehungsorientiert — Vertrauen ist persönlich.",
+    scenarios: {
+      firstMeeting: "Herzliche Begrüssung, persönliche Verbindung zählt früh. Etwas Smalltalk über Leben, Essen, Region ist willkommen. Beziehungen öffnen Türen, die reine Kompetenz allein nicht öffnet. Kleiden Sie sich gut — das Auftreten hat Bedeutung.",
+      negotiation: "Beziehungsgetrieben. Das Vertrauen in Sie als Person trägt den Abschluss. Ausdruckskraft, Flexibilität und etwas Geben und Nehmen sind normal. Starre, rein transaktionale Ansätze wirken kühl.",
+      feedback: "Indirekter als in Deutschland oder der Schweiz, besonders in der Öffentlichkeit. Kritik wird abgemildert und oft unter vier Augen geäussert, um Beziehung und Würde zu schützen. Achten Sie auf Ton und Kontext, nicht nur auf Worte.",
+      email: "Wärmer und persönlicher als in Nordeuropa, aber dennoch professionell. Eine höfliche Eröffnung zählt. Beziehungssignale wiegen neben dem Inhalt.",
+      hierarchy: "Hierarchisch; Rang und persönliche Autorität zählen. Entscheidungen konzentrieren sich an der Spitze, und persönliche Beziehungen zu Entscheidungsträgern sind wichtig.",
+      meetings: "Können fliessender sein — flexible Startzeiten, lebhaftes Gespräch, etwas Übereinanderreden. Leidenschaft und Lebhaftigkeit sind Beteiligung, kein Konflikt. Die Struktur kann lockerer sein, als Sie es gewohnt sind."
+    }
+  },
+  uk: {
+    tagline: "Höflich, understatet, indirekt — die Bedeutung liegt oft zwischen den Zeilen.",
+    scenarios: {
+      firstMeeting: "Freundlicher Smalltalk (Wetter, Anreise, Sport) leitet ins Geschäft über. Höflichkeit und Understatement sind der Grundton. Humor, auch Selbstironie, ist soziales Schmiermittel und Vertrauenssignal.",
+      negotiation: "Understatet und beziehungsbewusst. Ein „ja, aber ich frage mich, ob …\" bedeutet oft „nein\". Lesen Sie die codierte Sprache: „quite good\" kann „enttäuschend\" heissen, „with respect\" kann einem Widerspruch vorausgehen. Diplomatie statt Direktheit.",
+      feedback: "Indirekt und abgefedert. Kritik kommt in Lob und Weichmacher verpackt („might just want to consider …\"). Nehmen Sie die eigentliche Botschaft ernst, auch wenn die Verpackung sanft ist.",
+      email: "Höflich, mit Weichmachern („just\", „perhaps\", „when you get a chance\"). Wärme und Zuvorkommenheit zählen. Zu grosse Direktheit kann aggressiv wirken.",
+      hierarchy: "Mässig hierarchisch, aber im Ton egalitär. Führungskräfte beraten sich und stellen ihre Autorität nicht heraus. Status- und Klassensignale existieren, werden aber selten ausgesprochen.",
+      meetings: "Geordnet und höflich. Offener Konflikt wird vermieden; Widerspruch ist codiert und diplomatisch. Konsens wird ohne grosse Förmlichkeit gesucht. Schweigen kann Vorbehalte signalisieren."
+    }
+  },
+  us: {
+    tagline: "Schnell, freundlich, in der Sache direkt — informell, aber ergebnisorientiert.",
+    scenarios: {
+      firstMeeting: "Rasch freundlich und informell — Vornamen, lockerer Draht, gut gelaunter Smalltalk. Doch Wärme ist noch keine tiefe Freundschaft. Kommen Sie ziemlich zügig zur Sache; Zeit ist Geld.",
+      negotiation: "Schnelltaktig und ergebnisorientiert. Optimismus, Begeisterung und ein klares Nutzenversprechen verkaufen. Entscheidungen können schnell und von einer bevollmächtigten Person getroffen werden. „Let's move forward\" kommt früher, als Europäer erwarten.",
+      feedback: "Zuerst positiv gerahmt („Feedback-Sandwich\"), dann das Problem. Lob ist häufig und begeistert. Negatives Feedback ist milder als in Deutschland, aber offener als im Vereinigten Königreich.",
+      email: "Direkt, knapp, handlungsorientiert. Vornamen, freundlich, aber effizient. Schnelle Antworten sind normal und erwartet.",
+      hierarchy: "Im Stil egalitär — Vornamen über alle Ebenen —, doch Entscheidungen trifft oft entschieden, wer zuständig ist. Der Idee der Chefin zu widersprechen, ist eher akzeptiert als in Frankreich oder Italien.",
+      meetings: "Energiegeladen, partizipativ, handlungsorientiert. Alle sind zur Wortmeldung eingeladen; Dazwischenreden mit Ideen ist oft in Ordnung. Endet mit klaren nächsten Schritten und Verantwortlichen."
+    }
+  },
+  in: {
+    tagline: "Beziehungsgetrieben, hierarchisch und diplomatisch indirekt.",
+    scenarios: {
+      firstMeeting: "Herzlich, Beziehung zuerst. Persönlicher Draht und etwas Smalltalk über Familie, Herkunft, Reise bauen Vertrauen auf. Respekt vor Rang und Alter wird früh signalisiert. Titel sind wichtig.",
+      negotiation: "Beziehung und Vertrauen tragen den Abschluss. Flexibilität und Geduld helfen; Zeitpläne können fliessend sein. Ein direktes „Nein\" wird oft vermieden — „wir versuchen es\" oder „mal sehen\" kann Schwierigkeiten signalisieren. Lesen Sie indirekte Hinweise.",
+      feedback: "Indirekt, besonders nach oben oder in der Öffentlichkeit. Das Wahren des Gesichts ist wichtig — kritisches Feedback gibt man am besten unter vier Augen und behutsam. Öffentliche Kritik kann die Beziehung stark beschädigen.",
+      email: "Oft förmlicher und respektvoller, besonders gegenüber Ranghöheren. Höflichkeits- und Respektmarker zählen. Klarheit hilft, aber schroffe Direktheit kann verletzend wirken.",
+      hierarchy: "Stark hierarchisch. Rang gebietet Respekt; Entscheidungen fliessen von oben. Jüngere widersprechen einer ranghohen Person im Raum oft nicht offen. Leiten Sie Anfragen über die richtige Ebene.",
+      meetings: "Ranghohe Stimmen führen; Jüngere schweigen aus Respekt womöglich. „Ja\" kann „ich höre Sie\" heissen, nicht „ich stimme zu\". Planen Sie Nachfassen ein, um echte Zustimmung zu bestätigen. Beziehungswärme erleichtert den Prozess."
+    }
+  },
+  pt: {
+    tagline: "Herzlich, zuvorkommend, beziehungsbewusst und mässig förmlich.",
+    scenarios: {
+      firstMeeting: "Zuvorkommend und persönlich. Etwas Beziehungsaufbau geht dem Geschäft voraus. Höflichkeit und Respekt vor dem Rang werden geschätzt. Wärme ist echt, aber professionell.",
+      negotiation: "Beziehungsgetrieben und geduldig. Vertrauen zählt und wächst mit der Zeit. Vermeiden Sie Hast oder Druck. Persönlicher Draht ebnet den Weg.",
+      feedback: "Indirekt und taktvoll, auf Würde bedacht. Kritik wird abgemildert und oft unter vier Augen geäussert. Harte öffentliche Kritik kommt schlecht an.",
+      email: "Förmlich und zuvorkommend, mit Titeln und Grussformeln. Wärmer im Ton als Nordeuropa. Höflichkeit signalisiert Respekt.",
+      hierarchy: "Hierarchisch; Respekt vor Rang und Position. Entscheidungen konzentrieren sich oben. Achtung vor Alter und Rang ist verbreitet.",
+      meetings: "Beziehungswärme neben dem Geschäftlichen. Startzeiten können etwas flexibel sein. Ranghohe Personen prägen den Raum; offener Widerspruch ist gedämpft."
+    }
+  },
+  es: {
+    tagline: "Gesellig, ausdrucksstark, beziehungsorientiert, mit flexiblem Zeitgefühl.",
+    scenarios: {
+      firstMeeting: "Herzlich und gesellig. Persönlicher Draht und etwas Smalltalk kommen vor dem Geschäft. Beziehungen sind das Fundament des Vertrauens. Rechnen Sie mit Ausdruckskraft und lebhaftem Gespräch.",
+      negotiation: "Persönliches Vertrauen trägt Abschlüsse. Der persönliche Kontakt zählt. Flexibilität und Geduld helfen; ein rein transaktionaler Stil wirkt kühl. Leidenschaft und Wärme sind normal.",
+      feedback: "Milder als in Nordeuropa und auf Würde bedacht, unter etablierten Beziehungen aber durchaus offen. Für Kritisches ist das Vier-Augen-Gespräch sicherer.",
+      email: "Warm und zuvorkommend, weniger förmlich als Frankreich, sobald ein Draht besteht. Persönliche Note ist willkommen. Der Beziehungston zählt neben dem Inhalt.",
+      hierarchy: "Hierarchisch; die Autorität der ranghohen Person ist real. Entscheidungen konzentrieren sich oben. Persönliche Beziehungen zu Entscheidungsträgern haben Gewicht.",
+      meetings: "Lebhaft und gesellig, mit Übereinanderreden und Lebhaftigkeit. Flexible Startzeiten. Leidenschaft signalisiert Beteiligung. Die Struktur kann lockerer wirken als in der Schweiz."
+    }
+  },
+  al: {
+    tagline: "Beziehung zuerst und gastfreundlich, mit Hierarchie und Ehrenwort (besa) im Kern.",
+    note: "Zwei kulturelle Anker sitzen tief: besa (das Halten des Wortes — eine mündliche Zusage hat echtes Gewicht) und mikpritje (Gastfreundschaft). Jüngere Menschen und die Diaspora verbinden diese oft mit den Normen ihrer neuen Heimat.",
+    scenarios: {
+      firstMeeting: "Herzlich und persönlich. Rechnen Sie mit freundlichen Fragen zu Familie, Gesundheit und Leben vor dem Geschäft — dies zu überspringen wirkt kühl und transaktional. Kaffee oder Gastfreundschaft anzunehmen, gehört zum Beziehungsaufbau, nicht davon weg. Seien Sie selbst pünktlich, auch wenn andere etwas später kommen.",
+      negotiation: "Vertrauen und persönliche Beziehung zuerst; Abschlüsse gelingen selten im ersten Treffen. Albaner können hart verhandeln, sind aber flexibel, sobald Vertrauen besteht. Das gegebene Wort (besa) hat echtes Gewicht — manchmal mehr als das Papier. Geduld und echter Draht zahlen sich aus.",
+      feedback: "Gemischt: in operativen oder fachlichen Fragen recht direkt, gegenüber Vorgesetzten oder bei heiklen Themen diplomatischer und auf das Gesicht bedacht. Kritisches wirkt unter vier Augen besser. Lesen Sie Ton und Körpersprache — Ausdruckskraft ist normal, eine erhobene Stimme ist Beteiligung, kein Zorn.",
+      email: "Zuvorkommend und recht förmlich, besonders gegenüber Ranghöheren (Titel verwenden — Zoti/Zonja). Wichtiges bespricht man aber lieber persönlich; E-Mail dient dem routinemässigen Nachfassen. Bestätigen Sie Kernpunkte nach dem persönlichen Gespräch schriftlich.",
+      hierarchy: "Klar hierarchisch, mit starkem Respekt vor Rang, Alter und Titeln. Entscheidungen kommen von oben, oft in familien- oder gründergeführten Firmen, in denen persönliche Autorität zentral ist. Begrüssen und adressieren Sie zuerst die ranghöchste Person.",
+      meetings: "Beginnen oft mit echtem geselligem Gespräch bei Kaffee. In offiziellen Rahmen können sie förmlich verlaufen, informell aber zeitlich flexibel. Ausdrucksstarke, lebhafte Diskussion ist normal; Unterbrechungen gehören zum Rhythmus, nicht zur Unhöflichkeit. Bestätigen Sie Entscheidungen klar, denn mündliche Zusagen zählen."
+    }
+  },
+  tr: {
+    tagline: "Herzlich, beziehungsgetrieben und hierarchisch — die Kommunikation ist stark kontextgebunden.",
+    note: "Die Türkei verbindet europäische und nahöstliche Geschäftsnormen; die Istanbuler Unternehmenskultur kann westlicher wirken, während Beziehungen, Hierarchie und Gastfreundschaft überall zentral bleiben.",
+    scenarios: {
+      firstMeeting: "Beziehung und Wärme zuerst. Rechnen Sie mit Tee oder Kaffee und echtem persönlichem Gespräch vor dem Geschäft — dieses Ritual gehört zum Deal, nicht zum Smalltalk, den man überspringt. Respekt vor Alter und Rang wird früh signalisiert; begrüssen und adressieren Sie die ranghöchste Person zuerst, mit Titel.",
+      negotiation: "Vertrauen trägt alles und braucht Zeit; rechnen Sie mit einer Beziehungsphase und mehreren Treffen. Feilschen ist erwartet und ausdrucksstark. Eine sanfte oder indirekte Antwort kann ein „Nein\" verbergen. Entscheidungen kommen von oben — sorgen Sie dafür, dass der echte Entscheider im Raum ist.",
+      feedback: "Indirekt, um Harmonie und Gesicht zu wahren. Direkte Kritik — besonders öffentlich oder gegenüber Ranghöheren — kommt schlecht an. Äussern Sie Kritisches unter vier Augen, behutsam und in Respekt verpackt. Lesen Sie das Angedeutete ebenso wie das Gesagte.",
+      email: "Förmlich und respektvoll gegenüber Rang und Titel. Warme Beziehungsrahmung hilft; reine Schroffheit kann abrupt wirken. Für Wichtiges wird das persönliche Gespräch oder der Anruf bevorzugt, mit E-Mail zur Bestätigung danach.",
+      hierarchy: "Stark hierarchisch (hohe Machtdistanz). Die ranghohe Person ist oft eine väterliche Autorität; Macht ist zentralisiert, und Jüngere erwarten Anweisung, statt offen zu widersprechen. Leiten Sie Anfragen über die richtige Ebene und zeigen Sie sichtbaren Respekt vor der Position.",
+      meetings: "Ranghohe Stimmen führen; Jüngere schweigen aus Respekt womöglich. Warm, ausdrucksstark und beziehungsorientiert, mit flexiblem Timing. Harmonie wird gewahrt, offener Widerspruch ist gedämpft — echte Positionen zeigen sich womöglich erst danach unter vier Augen. Gastfreundschaft rahmt die ganze Begegnung."
+    }
+  },
+  cn: {
+    tagline: "Beziehung (guanxi) und Gesicht stehen im Zentrum; die Kommunikation ist stark kontextgebunden.",
+    scenarios: {
+      firstMeeting: "Beziehung und Respekt zuerst. Reichen Sie die Visitenkarte mit beiden Händen und einem Moment der Aufmerksamkeit. Respektieren Sie den Rang sichtbar. Geduld und eine langfristige Sicht signalisieren Ernsthaftigkeit.",
+      negotiation: "Vertrauen und guanxi (Beziehungsnetzwerke) tragen alles. Rechnen Sie mit einer langsameren Beziehungsphase. Vermeiden Sie es, jemanden das Gesicht verlieren zu lassen. Entscheidungen kommen von oben und können dauern; Geduld ist strategisch.",
+      feedback: "Sehr indirekt. Das Wahren des Gesichts ist zentral — kritisieren Sie niemanden vor anderen. Negatives wird angedeutet, delegiert oder unter vier Augen und behutsam vermittelt. Lesen Sie Schweigen und Zögern aufmerksam.",
+      email: "Förmlich und respektvoll gegenüber dem Rang. Direktheit kann aggressiv wirken. Beziehungswärme und Höflichkeit zählen. Antworten können über die Hierarchie laufen.",
+      hierarchy: "Stark hierarchisch. Rang und Position gebieten klaren Respekt. Entscheidungen fliessen von oben; Jüngere widersprechen Ranghöheren selten offen. Adressieren Sie die richtige Ebene.",
+      meetings: "Ranghohe Personen sprechen und entscheiden; Jüngere beobachten. Harmonie wird im Raum gewahrt. „Ja\" kann Zur-Kenntnis-Nahme heissen, nicht Zustimmung. Echte Entscheidungen fallen oft ausserhalb des Meetings."
+    }
+  },
+  jp: {
+    tagline: "Konsensgetrieben, stark kontextgebunden und sehr auf Harmonie und Gesicht bedacht.",
+    scenarios: {
+      firstMeeting: "Förmlich und respektvoll. Visitenkarten (meishi) werden mit beiden Händen überreicht und respektvoll betrachtet. Pünktlichkeit ist essenziell. Stille und Pausen sind angenehm und bedeutungsvoll — füllen Sie sie nicht vorschnell.",
+      negotiation: "Konsensbasiert (nemawashi — stille Vorarbeit vor Entscheidungen). Rechnen Sie mit einem langsamen, gründlichen Prozess mit vielen Beteiligten. Harmonie und Gesicht werden gewahrt. Eine sanfte Antwort kann ein festes „Nein\" verbergen.",
+      feedback: "Äusserst indirekt. Direkte Kritik wird vermieden, um Harmonie und Gesicht zu wahren. Bedenken werden angedeutet oder unter vier Augen über Mittelspersonen geäussert. Das Ungesagte kann mehr zählen als das Gesagte.",
+      email: "Förmlich, höflich und sorgfältig. Bescheidenheit und korrekte Höflichkeitsformeln zählen. Schroffheit irritiert. Rechnen Sie mit überlegten statt sofortigen Antworten.",
+      hierarchy: "Stark hierarchisch und senioritätsbasiert. Achtung vor Rang und Alter ist klar. Entscheidungen brauchen breite interne Abstimmung, bevor sie ausgesprochen werden.",
+      meetings: "Oft zur Bestätigung bereits vorab geformter Entscheidungen. Schweigen bedeutet Nachdenken, nicht Leere. Offener Widerspruch ist im Raum selten. Harmonie wird aktiv gewahrt."
+    }
+  },
+  ae: {
+    tagline: "Beziehungs- und ehrbasiert, hierarchisch, mit warmer Gastfreundschaft.",
+    scenarios: {
+      firstMeeting: "Gastfreundschaft und persönlicher Draht zuerst — nehmen Sie Tee/Kaffee an, lassen Sie grosszügig Smalltalk zu. Respekt vor Rang und Status ist wichtig. Beziehungen gehen jedem einzelnen Deal voraus und überdauern ihn.",
+      negotiation: "Vertrauen und persönliche Beziehung sind das Fundament. Rechnen Sie mit einer Beziehungsphase vor der Sache. Geduld zählt; Zeitpläne sind flexibel. Entscheidungen liegen bei ranghohen Personen und lassen sich nicht drängen.",
+      feedback: "Indirekt und ehrbewusst. Kritisieren Sie nie öffentlich — das führt zum Gesichtsverlust. Kritisches äussert man am besten unter vier Augen, behutsam und über vertraute Beziehungen.",
+      email: "Zuvorkommend, respektvoll gegenüber Titeln und Rang. Warme Beziehungsrahmung hilft. Direktheit ohne Beziehung kann abrupt wirken.",
+      hierarchy: "Stark hierarchisch; Status, Alter und Position gebieten Respekt. Entscheidungen kommen von oben. Sprechen Sie Ranghohe angemessen an und leiten Sie über die richtige Ebene.",
+      meetings: "Können später beginnen und flexibel verlaufen; Unterbrechungen (Anrufe, Nebengespräche) kommen vor und sind nicht unhöflich. Ranghohe Personen führen. Beziehungswärme trägt die Ergebnisse."
+    }
+  },
+  br: {
+    tagline: "Herzlich, ausdrucksstark, stark beziehungsgetrieben, mit flexibler Zeit.",
+    scenarios: {
+      firstMeeting: "Warm, persönlich und ausdrucksstark. Grosszügiger Smalltalk und echtes persönliches Interesse bauen das Vertrauen auf, auf dem das Geschäft beruht. Körperliche Nähe (geringerer Abstand, Berührung am Arm) ist normal.",
+      negotiation: "Beziehungen sind alles — man macht Geschäfte mit Menschen, die man mag und denen man vertraut. Rechnen Sie mit einem langsameren, wärmeren Aufbau. Flexibilität und Geduld helfen. Rein transaktionale Ansätze wirken kühl und stocken.",
+      feedback: "Indirekt und beziehungsschonend. Kritik wird abgemildert und unter vier Augen geäussert. Wärme und Würde zu wahren zählt mehr als Direktheit.",
+      email: "Warm, persönlich und freundlich. Beziehungssignale zählen so viel wie der Inhalt. Die Förmlichkeit lockert sich rasch, sobald ein Draht besteht.",
+      hierarchy: "Hierarchisch; Rang und persönliche Autorität zählen. Entscheidungen konzentrieren sich oben, und persönliche Bindungen zu Entscheidungsträgern wiegen.",
+      meetings: "Lebhaft, gesellig und zeitlich flexibel. Übereinanderreden und Lebhaftigkeit sind Beteiligung. Beziehungsaufbau geht oft der eigentlichen Agenda voraus."
+    }
+  },
+  nl: {
+    tagline: "Aussergewöhnlich direkt und egalitär — Offenheit ist eine Tugend.",
+    scenarios: {
+      firstMeeting: "Freundlich, informell und rasch zur Sache. Vornamen sind üblich. Wenig Hierarchie sichtbar. Offenheit ist normal und willkommen — verwechseln Sie sie nicht mit Unhöflichkeit.",
+      negotiation: "Sehr direkt und inhaltsgetrieben. Rechnen Sie mit offenem, unverblümtem Widerspruch und einem starken egalitären Zug — jede darf jeden herausfordern. Entscheidungen sind konsensbasiert („Poldermodell\"), Zustimmung zählt also.",
+      feedback: "Mit das Direkteste weltweit. Kritik ist explizit, sofort und ungeschönt — und nicht persönlich. Zu starkes Abmildern kann Ihre Botschaft ganz verdecken.",
+      email: "Direkt, knapp und wenig zeremoniell. Sagen Sie genau, was Sie meinen. Übertriebene Höflichkeit kann ausweichend wirken.",
+      hierarchy: "Sehr egalitär. Titel zählen wenig; das beste Argument gewinnt, unabhängig vom Rang. Jüngere widersprechen Ranghöheren offen. Konsens wird breit gesucht.",
+      meetings: "Offene, egalitäre Debatte. Alle bringen sich ein, Widerspruch wird klar geäussert. Konsenssuche kann Diskussion brauchen, doch die Zustimmung ist echt, sobald sie erreicht ist."
+    }
+  }
+};
+
+/* ============================================================
+   CULTURE CONTENT — FRENCH (fr)
+   ============================================================ */
+const CONTENT_FR = {
+  ch: {
+    tagline: "Le point de référence local — précis, discret, en quête de consensus.",
+    note: "La Suisse est elle-même multiculturelle : la Suisse alémanique passe pour plus directe et structurée, la Suisse romande pour un peu plus chaleureuse et axée sur la relation, le Tessin pour plus expressif. Prenez « la Suisse » comme point de départ, puis ajustez selon la région.",
+    scenarios: {
+      firstMeeting: "La ponctualité est une marque de respect — arrivez à l'heure, pas en avance. Attendez-vous à une poignée de main ferme, au nom de famille et au titre jusqu'à ce qu'on vous invite à plus de familiarité. Les échanges informels sont brefs et neutres (météo, trajet, pas la vie privée). Aller droit à l'ordre du jour est apprécié, pas froid.",
+      negotiation: "Fondé sur les faits et minutieux. Les décisions se prennent rarement séance tenante — attendez-vous à un examen soigneux et à un consensus interne préalable. Les tactiques de pression et la vente agressive se retournent contre vous. La fiabilité et une exécution précise l'emportent sur le charisme.",
+      feedback: "Direct mais posé. La critique est formulée clairement et sans dramatisation ; elle porte sur le travail, pas sur la personne. Trop de compliments paraît peu sincère. Si un collègue suisse se tait, c'est souvent de la réflexion, pas de la désapprobation.",
+      email: "Formel, structuré, complet. Employez les titres et des phrases entières. Énoncez l'objet clairement et tôt. Les réponses peuvent être mesurées plutôt qu'instantanées — c'est de la diligence, pas du désintérêt.",
+      hierarchy: "Assez horizontale au quotidien, mais respectueuse de l'expertise et du rôle. Le consensus compte ; les décisions qui contournent les parties prenantes s'enlisent. Les responsables consultent avant de décider.",
+      meetings: "Commencer et finir à l'heure, ordre du jour suivi de près. La préparation est attendue. Les interruptions sont rares ; chacun parle à son tour. Actions et responsables sont notés — les résultats vagues sont mal vus."
+    }
+  },
+  de: {
+    tagline: "Direct, structuré, à l'aise pour séparer la tâche de la relation.",
+    scenarios: {
+      firstMeeting: "Ponctuel à la minute. Poignée de main, nom de famille et titre (Herr/Frau + Dr. le cas échéant). L'affaire d'abord ; la chaleur personnelle vient plus tard, une fois la confiance établie. La franchise est une marque de respect, non de grossièreté.",
+      negotiation: "Rigoureux, riche en détails et guidé par la logique. Venez avec des données et un dossier solide. Attendez-vous à des questions pointues et à la contradiction — c'est de l'engagement, pas de l'hostilité. Les décisions suivent l'analyse, non l'intuition.",
+      feedback: "Très direct. Le retour négatif est explicite et donné sans coussin d'atténuation. Ne prenez pas la franchise pour de la colère. Envelopper la critique dans trop de compliments peut brouiller votre message.",
+      email: "Précis et formel. Objet clair, corps structuré, titres corrects. La complétude prime sur la vitesse. L'ambiguïté déplaît — dites exactement ce dont vous avez besoin.",
+      hierarchy: "Rôles et responsabilités sont clairement définis. Respectez la voie hiérarchique, mais l'expertise pèse réellement. Les décisions peuvent être centralisées au sommet, même dans des structures d'apparence horizontale.",
+      meetings: "Guidé par l'ordre du jour et discipliné. Commencer à l'heure, rester sur le sujet. Le débat est bienvenu et peut être vif ; il vise les idées, pas les personnes. Les décisions sont documentées et leur application attendue."
+    }
+  },
+  fr: {
+    tagline: "Intellectuellement rigoureux, conscient de la relation, à l'aise avec le débat.",
+    scenarios: {
+      firstMeeting: "Une certaine formalité et un peu de mise en relation avant l'affaire. Titre + nom de famille. Une joute intellectuelle est normale et même appréciée. Un démarrage légèrement tardif n'est pas rare, mais soyez tout de même à l'heure.",
+      negotiation: "Le débat est un atout, pas une rupture. Attendez-vous à la contradiction, aux contre-arguments et à un goût pour les positions bien raisonnées. La relation et la qualité de votre logique comptent l'une comme l'autre. Les décisions reviennent souvent à une figure senior.",
+      feedback: "Direct sur le fond, avec plus de soin rhétorique qu'en Allemagne. La critique peut être pointue. Un désaccord exprimé ouvertement est un signe d'engagement, non d'irrespect.",
+      email: "Formel, avec les formules de courtoisie correctes (Monsieur/Madame, formules de politesse appropriées). Une argumentation bien construite est appréciée. Un peu plus formel que le ton oral ne le laisse penser.",
+      hierarchy: "Assez hiérarchique. L'autorité de la personne senior est réelle, et les décisions se concentrent près du sommet. Contourner un responsable est mal reçu.",
+      meetings: "Les réunions peuvent être un lieu de discussion et de mise à l'épreuve des idées, pas seulement de confirmation des décisions. Attendez-vous à un débat éloquent. La décision finale peut venir ensuite, d'en haut."
+    }
+  },
+  it: {
+    tagline: "Chaleureux, expressif, la relation d'abord — la confiance est personnelle.",
+    scenarios: {
+      firstMeeting: "Salutations chaleureuses, le lien personnel compte tôt. Un peu d'échange sur la vie, la cuisine, la région est bienvenu. Les relations ouvrent des portes que la seule compétence n'ouvre pas. Habillez-vous bien — la présentation a du sens.",
+      negotiation: "Guidée par la relation. La confiance en vous en tant que personne soutient l'accord. Expressivité, souplesse et un peu de donnant-donnant sont normaux. Les approches rigides, purement transactionnelles, paraissent froides.",
+      feedback: "Plus indirect qu'en Allemagne ou en Suisse, surtout en public. La critique est adoucie et souvent donnée en privé, pour protéger la relation et la dignité. Lisez le ton et le contexte, pas seulement les mots.",
+      email: "Plus chaleureux et personnel que les normes nord-européennes, mais tout de même professionnel. Une ouverture courtoise compte. Les signaux relationnels pèsent aux côtés du contenu.",
+      hierarchy: "Hiérarchique ; l'ancienneté et l'autorité personnelle comptent. Les décisions se concentrent au sommet, et les relations personnelles avec les décideurs comptent.",
+      meetings: "Peuvent être plus fluides — horaires souples, conversation animée, quelques chevauchements de parole. La passion et l'animation sont de l'engagement, pas un conflit. La structure peut être plus lâche que ce à quoi vous êtes habitué."
+    }
+  },
+  uk: {
+    tagline: "Poli, tout en retenue, indirect — le sens loge souvent entre les lignes.",
+    scenarios: {
+      firstMeeting: "Des échanges informels amicaux (météo, trajet, sport) mènent à l'affaire. Politesse et euphémisme sont le registre. L'humour, y compris l'autodérision, est un lubrifiant social et un signal de confiance.",
+      negotiation: "Tout en retenue et attentif à la relation. Un « oui, mais je me demande si… » signifie souvent « non ». Décodez le langage : « quite good » peut vouloir dire « décevant », « with respect » peut précéder un désaccord. La diplomatie plutôt que la franchise.",
+      feedback: "Indirect et enrobé. La critique arrive enveloppée de compliments et d'atténuateurs (« might just want to consider… »). Prenez le message de fond au sérieux, même si l'emballage est doux.",
+      email: "Poli, avec des atténuateurs (« just », « perhaps », « when you get a chance »). Chaleur et courtoisie comptent. Trop de franchise peut paraître agressive.",
+      hierarchy: "Modérément hiérarchique mais égalitaire dans le ton. Les responsables consultent et minimisent leur autorité. Les repères de statut et de classe existent, mais sont rarement explicités.",
+      meetings: "Ordonné et poli. Le conflit ouvert est évité ; le désaccord est codé et diplomatique. On cherche le consensus sans grande formalité. Le silence peut signaler une réserve."
+    }
+  },
+  us: {
+    tagline: "Rapide, amical, direct sur la tâche — informel mais axé sur les résultats.",
+    scenarios: {
+      firstMeeting: "Vite amical et informel — prénoms, contact facile, échange enjoué. Mais la chaleur n'est pas encore une amitié profonde. Passez à l'affaire assez vite ; le temps, c'est de l'argent.",
+      negotiation: "Rythme rapide et orienté résultats. L'optimisme, l'enthousiasme et une proposition de valeur claire font vendre. Les décisions peuvent être rapides et prises par une personne habilitée. « Let's move forward » arrive plus tôt que les Européens ne l'attendent.",
+      feedback: "D'abord cadré positivement (« sandwich »), puis le problème. Les éloges sont fréquents et enthousiastes. Le retour négatif est plus doux qu'en Allemagne mais plus ouvert qu'au Royaume-Uni.",
+      email: "Direct, concis, orienté action. Prénoms, amical mais efficace. Les réponses rapides sont normales et attendues.",
+      hierarchy: "Égalitaire dans le style — prénoms à tous les niveaux — mais les décisions sont souvent prises avec fermeté par celui qui en a la charge. Contester l'idée du chef est plus acceptable qu'en France ou en Italie.",
+      meetings: "Énergiques, participatives, axées sur l'action. La contribution de chacun est sollicitée ; couper pour ajouter une idée passe souvent. Se termine par des étapes claires et des responsables."
+    }
+  },
+  in: {
+    tagline: "Guidé par la relation, hiérarchique et diplomatiquement indirect.",
+    scenarios: {
+      firstMeeting: "Chaleureux, la relation d'abord. Le lien personnel et un peu d'échange sur la famille, l'origine, le voyage bâtissent la confiance. Le respect de l'ancienneté et de l'âge se signale tôt. Les titres comptent.",
+      negotiation: "La relation et la confiance soutiennent l'accord. Souplesse et patience aident ; les délais peuvent être fluides. Un « non » direct est souvent évité — « on va essayer » ou « on verra » peut signaler une difficulté. Décodez les signaux indirects.",
+      feedback: "Indirect, surtout vers le haut ou en public. Sauver la face est important — mieux vaut donner une critique en privé et avec douceur. La critique publique peut gravement abîmer la relation.",
+      email: "Souvent plus formel et déférent, surtout envers les aînés. Les marques de courtoisie et de respect comptent. La clarté aide, mais une franchise brutale peut sembler blessante.",
+      hierarchy: "Fortement hiérarchique. L'ancienneté impose le respect ; les décisions descendent du sommet. Les plus juniors ne contredisent pas ouvertement un senior en réunion. Faites passer les demandes par le bon niveau.",
+      meetings: "Les voix seniors mènent ; les juniors peuvent se taire par respect. « Oui » peut signifier « je vous entends », non « je suis d'accord ». Prévoyez un suivi pour confirmer un véritable alignement. La chaleur relationnelle huile le processus."
+    }
+  },
+  pt: {
+    tagline: "Chaleureux, courtois, conscient de la relation et modérément formel.",
+    scenarios: {
+      firstMeeting: "Courtois et avenant. Un peu de mise en relation précède l'affaire. Politesse et respect de l'ancienneté sont valorisés. La chaleur est sincère mais professionnelle.",
+      negotiation: "Guidée par la relation et patiente. La confiance compte et se construit avec le temps. Évitez de presser ou de forcer. Le lien personnel facilite la voie.",
+      feedback: "Indirect et plein de tact, soucieux de la dignité. La critique est adoucie et souvent donnée en privé. Une critique publique dure est mal reçue.",
+      email: "Formel et courtois, avec titres et salutations. Ton plus chaleureux qu'en Europe du Nord. La politesse signale le respect.",
+      hierarchy: "Hiérarchique ; respect de l'ancienneté et de la position. Les décisions se concentrent au sommet. La déférence à l'âge et au rang est courante.",
+      meetings: "Chaleur relationnelle aux côtés de l'affaire. Les horaires peuvent être un peu souples. Les figures seniors mènent ; le désaccord ouvert est atténué."
+    }
+  },
+  es: {
+    tagline: "Sociable, expressif, la relation d'abord, avec un rapport souple au temps.",
+    scenarios: {
+      firstMeeting: "Chaleureux et sociable. Le lien personnel et un peu d'échange précèdent l'affaire. Les relations sont le socle de la confiance. Attendez-vous à de l'expressivité et à une conversation animée.",
+      negotiation: "La confiance personnelle porte les accords. Le contact en personne compte. Souplesse et patience aident ; un style purement transactionnel paraît froid. Passion et chaleur sont normales.",
+      feedback: "Plus doux qu'en Europe du Nord et soucieux de la dignité, mais peut être assez franc entre relations établies. Le privé est plus sûr pour tout ce qui est critique.",
+      email: "Chaleureux et courtois, moins formel qu'en France une fois le lien établi. Les touches personnelles sont bienvenues. Le ton relationnel compte aux côtés du contenu.",
+      hierarchy: "Hiérarchique ; l'autorité de la personne senior est réelle. Les décisions se concentrent au sommet. Les relations personnelles avec les décideurs pèsent.",
+      meetings: "Animées et sociales, avec chevauchements de parole et animation. Horaires souples. La passion signale l'engagement. La structure peut sembler plus lâche que les normes suisses."
+    }
+  },
+  al: {
+    tagline: "La relation d'abord et l'hospitalité, avec la hiérarchie et la parole d'honneur (besa) au cœur.",
+    note: "Deux ancrages culturels sont profonds : la besa (tenir sa parole — un engagement verbal a un vrai poids) et la mikpritje (l'hospitalité). Les plus jeunes et la diaspora mêlent souvent cela aux normes de leur lieu d'installation.",
+    scenarios: {
+      firstMeeting: "Chaleureux et personnel. Attendez-vous à des questions amicales sur la famille, la santé et la vie avant l'affaire — les sauter paraît froid et transactionnel. Accepter un café ou l'hospitalité fait partie de la construction de la relation, ce n'est pas une digression. Soyez vous-même ponctuel, même si d'autres arrivent un peu en retard.",
+      negotiation: "La confiance et la relation personnelle d'abord ; les accords se concluent rarement au premier rendez-vous. Les Albanais peuvent négocier fermement mais restent souples une fois la confiance établie. La parole donnée (besa) a un vrai poids — parfois plus que les documents. La patience et un lien sincère paient.",
+      feedback: "Mitigé : assez direct et franc sur les questions opérationnelles ou techniques, mais plus diplomate et soucieux de la face avec les supérieurs ou sur les sujets sensibles. Ce qui est critique passe mieux en privé. Lisez le ton et le langage corporel — l'expressivité est normale, et une voix qui monte est de l'engagement, non de la colère.",
+      email: "Courtois et assez formel, surtout envers les aînés (utilisez les titres — Zoti/Zonja). Mais les questions importantes se traitent de préférence en personne ; l'e-mail sert au suivi de routine. Confirmez les points clés par écrit après la conversation personnelle.",
+      hierarchy: "Nettement hiérarchique, avec un fort respect de l'ancienneté, de l'âge et des titres. Les décisions viennent d'en haut, souvent dans des entreprises familiales ou dirigées par leur fondateur où l'autorité personnelle est centrale. Saluez et adressez-vous d'abord à la personne la plus haut placée.",
+      meetings: "Débutent souvent par une vraie conversation conviviale autour d'un café. Peuvent être formelles en cadre officiel mais souples sur l'horaire en informel. Une discussion expressive et animée est normale ; les interruptions font partie du rythme, non de l'impolitesse. Confirmez clairement les décisions, car l'accord verbal a du sens."
+    }
+  },
+  tr: {
+    tagline: "Chaleureux, guidé par la relation et hiérarchique — la communication est à contexte fort.",
+    note: "La Turquie fait le pont entre les normes d'affaires européennes et moyen-orientales ; la culture d'entreprise stambouliote peut paraître plus occidentale, tandis que relations, hiérarchie et hospitalité restent centrales partout.",
+    scenarios: {
+      firstMeeting: "La relation et la chaleur d'abord. Attendez-vous à du thé ou du café et à une vraie conversation personnelle avant l'affaire — ce rituel fait partie de l'accord, ce n'est pas un bavardage à expédier. Le respect de l'âge et de l'ancienneté se signale tôt ; saluez et adressez-vous d'abord à la personne la plus haut placée, avec son titre.",
+      negotiation: "La confiance soutient tout et prend du temps ; attendez-vous à une phase de relation et à plusieurs rendez-vous. Le marchandage est attendu et expressif. Une réponse douce ou indirecte peut masquer un « non ». Les décisions viennent d'en haut — assurez-vous que le vrai décideur est présent.",
+      feedback: "Indirect, pour protéger l'harmonie et la face. La critique directe — surtout en public ou envers un senior — est mal reçue. Donnez ce qui est critique en privé, avec douceur, enveloppé de respect. Lisez l'implicite autant que le dit.",
+      email: "Formel et respectueux du rang et du titre. Un cadrage relationnel chaleureux aide ; la pure franchise peut paraître abrupte. Pour l'important, on préfère le face-à-face ou l'appel, l'e-mail confirmant ensuite.",
+      hierarchy: "Fortement hiérarchique (forte distance au pouvoir). La figure senior est souvent une autorité paternelle ; le pouvoir est centralisé et les juniors attendent des directives plutôt que de contester ouvertement. Faites passer les demandes par le bon niveau et montrez un respect visible de la position.",
+      meetings: "Les voix seniors mènent ; les juniors peuvent se taire par respect. Chaleureuses, expressives et axées sur la relation, avec un horaire souple. L'harmonie est protégée, le désaccord ouvert est atténué — les vraies positions peuvent apparaître ensuite en privé. L'hospitalité encadre toute la rencontre."
+    }
+  },
+  cn: {
+    tagline: "La relation (guanxi) et la face sont centrales ; la communication est à contexte fort.",
+    scenarios: {
+      firstMeeting: "La relation et le respect d'abord. Échangez les cartes de visite à deux mains, avec un moment d'attention. Respectez visiblement l'ancienneté. La patience et une vision de long terme signalent le sérieux.",
+      negotiation: "La confiance et le guanxi (réseaux relationnels) soutiennent tout. Attendez-vous à une phase de relation plus lente. Évitez de faire perdre la face à quiconque. Les décisions viennent d'en haut et peuvent prendre du temps ; la patience est stratégique.",
+      feedback: "Très indirect. Sauver la face est primordial — ne critiquez jamais quelqu'un devant d'autres. Le message négatif est implicite, délégué, ou donné en privé et avec douceur. Décodez le silence et l'hésitation.",
+      email: "Formel et respectueux du rang. La franchise peut paraître agressive. Chaleur relationnelle et courtoisie comptent. Les réponses peuvent passer par la hiérarchie.",
+      hierarchy: "Fortement hiérarchique. Rang et position imposent un net respect. Les décisions descendent du sommet ; les juniors contredisent rarement les seniors ouvertement. Adressez-vous au bon niveau.",
+      meetings: "Les figures seniors parlent et décident ; les juniors observent. L'harmonie est protégée dans la salle. « Oui » peut signifier reconnaissance, non accord. Les vraies décisions se prennent souvent hors réunion."
+    }
+  },
+  jp: {
+    tagline: "Guidé par le consensus, à contexte fort, très attentif à l'harmonie et à la face.",
+    scenarios: {
+      firstMeeting: "Formel et respectueux. Les cartes (meishi) s'échangent à deux mains et se regardent avec respect. La ponctualité est essentielle. Silences et pauses sont confortables et signifiants — ne vous précipitez pas pour les combler.",
+      negotiation: "Fondée sur le consensus (nemawashi — un travail de fond discret avant les décisions). Attendez-vous à un processus lent et minutieux impliquant de nombreuses parties. Harmonie et face sont protégées. Une réponse douce peut masquer un « non » ferme.",
+      feedback: "Extrêmement indirect. La critique directe est évitée pour préserver l'harmonie et la face. Les réserves sont suggérées ou soulevées en privé par des intermédiaires. Le non-dit peut compter plus que le dit.",
+      email: "Formel, poli et soigné. L'humilité et les formules de courtoisie correctes comptent. La brusquerie détonne. Attendez-vous à des réponses réfléchies plutôt qu'instantanées.",
+      hierarchy: "Fortement hiérarchique et fondé sur l'ancienneté. La déférence au rang et à l'âge est nette. Les décisions exigent un large alignement interne avant d'être formulées.",
+      meetings: "Souvent pour confirmer des décisions déjà façonnées en amont. Le silence signale la réflexion, non le vide. Le désaccord ouvert est rare dans la salle. L'harmonie est activement protégée."
+    }
+  },
+  ae: {
+    tagline: "Fondé sur la relation et l'honneur, hiérarchique, avec une hospitalité chaleureuse.",
+    scenarios: {
+      firstMeeting: "L'hospitalité et le lien personnel d'abord — acceptez le thé/café, laissez place à de généreux échanges. Le respect de l'ancienneté et du statut est important. Les relations précèdent et survivent à tout accord ponctuel.",
+      negotiation: "La confiance et la relation personnelle sont le socle. Attendez-vous à une phase de relation avant le fond. La patience compte ; les délais sont souples. Les décisions reviennent aux figures seniors et ne se pressent pas.",
+      feedback: "Indirect et soucieux de l'honneur. Ne critiquez jamais en public — cela fait perdre la face. Les points critiques se soulèvent en privé, avec douceur, via des relations de confiance.",
+      email: "Courtois, respectueux des titres et du rang. Un cadrage relationnel chaleureux aide. La franchise sans relation peut paraître abrupte.",
+      hierarchy: "Fortement hiérarchique ; statut, âge et position imposent le respect. Les décisions viennent d'en haut. Adressez-vous aux seniors comme il convient et passez par le bon niveau.",
+      meetings: "Peuvent commencer tard et se dérouler avec souplesse ; les interruptions (appels, apartés) surviennent et ne sont pas impolies. Les figures seniors mènent. La chaleur relationnelle porte les résultats."
+    }
+  },
+  br: {
+    tagline: "Chaleureux, expressif, profondément guidé par la relation, avec un temps souple.",
+    scenarios: {
+      firstMeeting: "Chaleureux, personnel et expressif. De généreux échanges et un intérêt personnel sincère bâtissent la confiance dont dépend l'affaire. La proximité physique (distance réduite, main sur le bras) est normale.",
+      negotiation: "Les relations sont tout — on fait affaire avec ceux qu'on apprécie et en qui on a confiance. Attendez-vous à une montée en confiance plus lente et plus chaleureuse. Souplesse et patience aident. Les approches purement transactionnelles paraissent froides et s'enlisent.",
+      feedback: "Indirect et protecteur de la relation. La critique est adoucie et donnée en privé. Préserver chaleur et dignité compte plus que la franchise.",
+      email: "Chaleureux, personnel et amical. Les signaux relationnels comptent autant que le contenu. La formalité se détend vite une fois le lien établi.",
+      hierarchy: "Hiérarchique ; ancienneté et autorité personnelle comptent. Les décisions se concentrent au sommet, et les liens personnels avec les décideurs pèsent.",
+      meetings: "Animées, sociales et souples sur l'horaire. Chevauchements de parole et animation sont de l'engagement. La mise en relation précède souvent l'ordre du jour proprement dit."
+    }
+  },
+  nl: {
+    tagline: "Exceptionnellement direct et égalitaire — la franchise est une vertu.",
+    scenarios: {
+      firstMeeting: "Amical, informel et vite au but. Prénoms courants. Peu de hiérarchie affichée. La franchise est normale et bienvenue — ne la prenez pas pour de la grossièreté.",
+      negotiation: "Très direct et guidé par le contenu. Attendez-vous à un désaccord ouvert et sans détour et à un fort penchant égalitaire — chacun peut contester chacun. Les décisions sont consensuelles (« modèle du polder »), l'adhésion compte donc.",
+      feedback: "Parmi les plus directs au monde. La critique est explicite, immédiate et sans fard — et non personnelle. Trop l'adoucir peut brouiller entièrement votre message.",
+      email: "Direct, concis et peu cérémonieux. Dites exactement ce que vous pensez. Un excès de politesse peut sembler évasif.",
+      hierarchy: "Très égalitaire. Les titres comptent peu ; le meilleur argument l'emporte, quel que soit le rang. Les juniors contestent ouvertement les seniors. Le consensus est recherché largement.",
+      meetings: "Débat ouvert et égalitaire. Chacun contribue et le désaccord s'exprime clairement. La recherche de consensus peut demander de la discussion, mais l'adhésion est réelle une fois atteinte."
+    }
+  }
+};
+
+/* ============================================================
+   CULTURE CONTENT — ITALIAN (it)
+   ============================================================ */
+const CONTENT_IT = {
+  ch: {
+    tagline: "Il punto di riferimento locale — preciso, riservato, orientato al consenso.",
+    note: "La Svizzera è essa stessa multiculturale: la Svizzera tedesca è considerata più diretta e strutturata, la Svizzera romanda un po' più calorosa e orientata alla relazione, il Ticino più espressivo. Prendi «la Svizzera» come punto di partenza e adatta in base alla regione.",
+    scenarios: {
+      firstMeeting: "La puntualità è rispetto — arriva in orario, non in anticipo. Aspettati una stretta di mano ferma, cognome e titolo finché non ti si invita a maggiore confidenza. Le chiacchiere sono brevi e neutre (tempo, viaggio, non la vita privata). Andare dritti all'ordine del giorno è apprezzato, non freddo.",
+      negotiation: "Basata sui fatti e accurata. Le decisioni si prendono di rado seduta stante — aspettati un esame attento e un consenso interno preliminare. Le tattiche di pressione e la vendita aggressiva sono controproducenti. Affidabilità ed esecuzione precisa contano più del carisma.",
+      feedback: "Diretto ma composto. La critica è espressa con chiarezza e senza drammi; riguarda il lavoro, non la persona. Lodare troppo appare poco sincero. Se un collega svizzero tace, spesso è riflessione, non disapprovazione.",
+      email: "Formale, strutturata, completa. Usa titoli e frasi complete. Indica lo scopo con chiarezza e presto. Le risposte possono essere ponderate anziché immediate — è diligenza, non disinteresse.",
+      hierarchy: "Relativamente piatta nell'interazione quotidiana, ma rispettosa della competenza e del ruolo. Il consenso conta; le decisioni che scavalcano gli interessati si arenano. I responsabili si consultano prima di decidere.",
+      meetings: "Iniziare e finire in orario, ordine del giorno seguito da vicino. La preparazione è attesa. Le interruzioni sono rare; si parla a turno. Azioni e responsabili vengono annotati — i risultati vaghi sono mal visti."
+    }
+  },
+  de: {
+    tagline: "Diretto, strutturato e a suo agio nel separare il compito dalla relazione.",
+    scenarios: {
+      firstMeeting: "Puntuale al minuto. Stretta di mano, cognome e titolo (Herr/Frau + Dr. se del caso). Prima l'affare; il calore personale viene dopo, una volta guadagnata la fiducia. La franchezza è segno di rispetto, non di maleducazione.",
+      negotiation: "Rigorosa, ricca di dettagli e guidata dalla logica. Presentati con dati e un dossier solido. Aspettati domande incisive e obiezioni — è coinvolgimento, non ostilità. Le decisioni seguono l'analisi, non l'istinto.",
+      feedback: "Molto diretto. Il riscontro negativo è esplicito e dato senza cuscinetti attenuanti. Non scambiare la franchezza per rabbia. Avvolgere la critica in troppe lodi può offuscare il tuo messaggio.",
+      email: "Precisa e formale. Oggetto chiaro, corpo strutturato, titoli corretti. La completezza conta più della velocità. L'ambiguità è sgradita — di' esattamente ciò che ti serve.",
+      hierarchy: "Ruoli e responsabilità sono chiaramente definiti. Rispetta la linea gerarchica, ma la competenza pesa davvero. Le decisioni possono essere centralizzate al vertice anche in strutture d'aspetto piatto.",
+      meetings: "Guidato dall'ordine del giorno e disciplinato. Iniziare in orario, restare in tema. Il dibattito è benvenuto e può essere vivace; mira alle idee, non alle persone. Le decisioni sono documentate e se ne attende l'attuazione."
+    }
+  },
+  fr: {
+    tagline: "Intellettualmente rigoroso, attento alla relazione, a suo agio con il dibattito.",
+    scenarios: {
+      firstMeeting: "Una certa formalità e un po' di costruzione della relazione prima dell'affare. Titolo + cognome. Un confronto intellettuale è normale e persino gradito. Un inizio leggermente in ritardo non è insolito, ma tu sii comunque puntuale.",
+      negotiation: "Il dibattito è un pregio, non una rottura. Aspettati obiezioni, controargomentazioni e un gusto per le posizioni ben ragionate. La relazione e la qualità della tua logica contano entrambe. Le decisioni spettano spesso a una figura senior.",
+      feedback: "Diretto nella sostanza, con più cura retorica che in Germania. La critica può essere incisiva. Un disaccordo espresso apertamente è segno di coinvolgimento, non di mancanza di rispetto.",
+      email: "Formale, con le formule di cortesia corrette (Monsieur/Madame, saluti appropriati). Un'argomentazione ben costruita è apprezzata. Un po' più formale di quanto il tono parlato lasci intendere.",
+      hierarchy: "Piuttosto gerarchica. L'autorità della persona senior è reale, e le decisioni si concentrano vicino al vertice. Scavalcare un responsabile è mal visto.",
+      meetings: "Le riunioni possono essere un luogo di discussione e verifica delle idee, non solo di conferma delle decisioni. Aspettati un dibattito eloquente. La decisione finale può arrivare dopo, dall'alto."
+    }
+  },
+  it: {
+    tagline: "Caloroso, espressivo, prima la relazione — la fiducia è personale.",
+    scenarios: {
+      firstMeeting: "Saluti calorosi, il legame personale conta presto. Un po' di conversazione su vita, cibo, regione è benvenuta. Le relazioni aprono porte che la sola competenza non apre. Vèstiti bene — la presentazione ha un significato.",
+      negotiation: "Guidata dalla relazione. La fiducia in te come persona sorregge l'accordo. Espressività, flessibilità e un po' di dare-avere sono normali. Approcci rigidi, puramente transazionali, appaiono freddi.",
+      feedback: "Più indiretto che in Germania o Svizzera, soprattutto in pubblico. La critica è smorzata e spesso data in privato, per proteggere relazione e dignità. Leggi il tono e il contesto, non solo le parole.",
+      email: "Più calda e personale rispetto agli standard nordeuropei, ma pur sempre professionale. Un'apertura cortese conta. I segnali relazionali pesano accanto al contenuto.",
+      hierarchy: "Gerarchica; anzianità e autorità personale contano. Le decisioni si concentrano al vertice, e le relazioni personali con chi decide contano.",
+      meetings: "Possono essere più fluide — orari flessibili, conversazione vivace, qualche sovrapposizione di voci. Passione e vivacità sono coinvolgimento, non conflitto. La struttura può essere più libera di quanto sei abituato."
+    }
+  },
+  uk: {
+    tagline: "Cortese, misurato, indiretto — il significato sta spesso tra le righe.",
+    scenarios: {
+      firstMeeting: "Chiacchiere amichevoli (tempo, viaggio, sport) introducono all'affare. Cortesia e understatement sono il registro. L'umorismo, autoironia inclusa, è lubrificante sociale e segnale di fiducia.",
+      negotiation: "Misurato e attento alla relazione. Un «sì, ma mi chiedo se…» spesso significa «no». Decifra il linguaggio in codice: «quite good» può voler dire «deludente», «with respect» può precedere un disaccordo. Diplomazia anziché franchezza.",
+      feedback: "Indiretto e ovattato. La critica arriva avvolta in lodi e attenuatori («might just want to consider…»). Prendi sul serio il messaggio di fondo, anche se l'involucro è gentile.",
+      email: "Cortese, con attenuatori («just», «perhaps», «when you get a chance»). Calore e cortesia contano. Troppa franchezza può apparire aggressiva.",
+      hierarchy: "Moderatamente gerarchica ma egualitaria nel tono. I responsabili si consultano e minimizzano la propria autorità. I segnali di status e classe esistono, ma vengono raramente esplicitati.",
+      meetings: "Ordinato e cortese. Il conflitto aperto è evitato; il disaccordo è in codice e diplomatico. Si cerca il consenso senza grande formalità. Il silenzio può segnalare riserve."
+    }
+  },
+  us: {
+    tagline: "Rapido, amichevole, diretto sul compito — informale ma orientato ai risultati.",
+    scenarios: {
+      firstMeeting: "Presto amichevole e informale — nomi di battesimo, contatto facile, chiacchiere brillanti. Ma il calore non è ancora amicizia profonda. Passa all'affare abbastanza in fretta; il tempo è denaro.",
+      negotiation: "Ritmo rapido e orientato ai risultati. Ottimismo, entusiasmo e una chiara proposta di valore fanno vendere. Le decisioni possono essere rapide e prese da una persona autorizzata. «Let's move forward» arriva prima di quanto gli europei si aspettino.",
+      feedback: "Prima incorniciato in positivo («sandwich»), poi il problema. Le lodi sono frequenti ed entusiaste. Il riscontro negativo è più morbido che in Germania ma più aperto che nel Regno Unito.",
+      email: "Diretta, concisa, orientata all'azione. Nomi di battesimo, amichevole ma efficiente. Risposte rapide sono normali e attese.",
+      hierarchy: "Egualitaria nello stile — nomi di battesimo a ogni livello — ma le decisioni sono spesso prese con decisione da chi ne ha la responsabilità. Contestare l'idea del capo è più accettabile che in Francia o Italia.",
+      meetings: "Energiche, partecipative, orientate all'azione. Il contributo di tutti è sollecitato; interrompere per aggiungere un'idea spesso va bene. Si chiude con passi successivi chiari e responsabili."
+    }
+  },
+  in: {
+    tagline: "Guidato dalla relazione, gerarchico e diplomaticamente indiretto.",
+    scenarios: {
+      firstMeeting: "Caloroso, prima la relazione. Il legame personale e un po' di conversazione su famiglia, origini, viaggio costruiscono fiducia. Il rispetto per anzianità ed età si segnala presto. I titoli contano.",
+      negotiation: "Relazione e fiducia sorreggono l'accordo. Flessibilità e pazienza aiutano; le tempistiche possono essere fluide. Un «no» diretto è spesso evitato — «ci proviamo» o «vediamo» può segnalare una difficoltà. Decifra i segnali indiretti.",
+      feedback: "Indiretto, soprattutto verso l'alto o in pubblico. Salvare la faccia è importante — meglio dare una critica in privato e con delicatezza. La critica pubblica può danneggiare gravemente la relazione.",
+      email: "Spesso più formale e deferente, in particolare verso i più anziani. I segni di cortesia e rispetto contano. La chiarezza aiuta, ma una franchezza brusca può risultare offensiva.",
+      hierarchy: "Fortemente gerarchico. L'anzianità impone rispetto; le decisioni scendono dal vertice. I più giovani non contraddicono apertamente un senior in riunione. Fai passare le richieste dal livello giusto.",
+      meetings: "Le voci senior guidano; i junior possono tacere per rispetto. «Sì» può significare «ti ascolto», non «sono d'accordo». Prevedi un follow-up per confermare un reale allineamento. Il calore relazionale facilita il processo."
+    }
+  },
+  pt: {
+    tagline: "Caloroso, cortese, attento alla relazione e moderatamente formale.",
+    scenarios: {
+      firstMeeting: "Cortese e affabile. Un po' di costruzione della relazione precede l'affare. Cortesia e rispetto per l'anzianità sono apprezzati. Il calore è autentico ma professionale.",
+      negotiation: "Guidata dalla relazione e paziente. La fiducia conta e cresce nel tempo. Evita fretta o pressione. Il legame personale spiana la strada.",
+      feedback: "Indiretto e pieno di tatto, attento alla dignità. La critica è smorzata e spesso data in privato. Una critica pubblica dura è mal accolta.",
+      email: "Formale e cortese, con titoli e saluti. Tono più caldo che in Nord Europa. La cortesia segnala rispetto.",
+      hierarchy: "Gerarchico; rispetto per anzianità e posizione. Le decisioni si concentrano al vertice. La deferenza verso età e grado è comune.",
+      meetings: "Calore relazionale accanto agli affari. Gli orari possono essere un po' flessibili. Le figure senior guidano; il disaccordo aperto è attenuato."
+    }
+  },
+  es: {
+    tagline: "Socievole, espressivo, prima la relazione, con un rapporto flessibile col tempo.",
+    scenarios: {
+      firstMeeting: "Caloroso e socievole. Il legame personale e un po' di conversazione precedono l'affare. Le relazioni sono il fondamento della fiducia. Aspettati espressività e conversazione vivace.",
+      negotiation: "La fiducia personale sorregge gli accordi. Il contatto di persona conta. Flessibilità e pazienza aiutano; uno stile puramente transazionale appare freddo. Passione e calore sono normali.",
+      feedback: "Più morbido che in Nord Europa e attento alla dignità, ma può essere piuttosto franco tra relazioni consolidate. Il privato è più sicuro per tutto ciò che è critico.",
+      email: "Calda e cortese, meno formale che in Francia una volta stabilito il legame. I tocchi personali sono benvenuti. Il tono relazionale conta accanto al contenuto.",
+      hierarchy: "Gerarchico; l'autorità della persona senior è reale. Le decisioni si concentrano al vertice. Le relazioni personali con chi decide pesano.",
+      meetings: "Vivaci e sociali, con sovrapposizioni di voci e animazione. Orari flessibili. La passione segnala coinvolgimento. La struttura può sembrare più libera degli standard svizzeri."
+    }
+  },
+  al: {
+    tagline: "Prima la relazione e l'ospitalità, con gerarchia e parola d'onore (besa) al centro.",
+    note: "Due ancoraggi culturali sono profondi: la besa (mantenere la parola — un impegno verbale ha un peso reale) e la mikpritje (ospitalità). I più giovani e la diaspora spesso le fondono con le norme del luogo in cui si sono stabiliti.",
+    scenarios: {
+      firstMeeting: "Caloroso e personale. Aspettati domande cordiali su famiglia, salute e vita prima dell'affare — saltarle appare freddo e transazionale. Accettare un caffè o l'ospitalità fa parte della costruzione della relazione, non ne è una digressione. Sii tu stesso puntuale, anche se altri arrivano un po' in ritardo.",
+      negotiation: "Prima la fiducia e la relazione personale; gli accordi si chiudono di rado al primo incontro. Gli albanesi possono negoziare con fermezza ma restano flessibili una volta stabilita la fiducia. La parola data (besa) ha un peso reale — talvolta più dei documenti. Pazienza e un legame sincero pagano.",
+      feedback: "Misto: piuttosto diretto e franco su questioni operative o tecniche, ma più diplomatico e attento alla faccia con i superiori o su temi delicati. Ciò che è critico rende meglio in privato. Leggi il tono e il linguaggio del corpo — l'espressività è normale, e una voce che si alza è coinvolgimento, non rabbia.",
+      email: "Cortese e piuttosto formale, soprattutto verso i più anziani (usa i titoli — Zoti/Zonja). Ma le questioni importanti si trattano preferibilmente di persona; l'e-mail serve al follow-up di routine. Conferma i punti chiave per iscritto dopo la conversazione personale.",
+      hierarchy: "Nettamente gerarchico, con forte rispetto per anzianità, età e titoli. Le decisioni vengono dall'alto, spesso in aziende familiari o guidate dal fondatore in cui l'autorità personale è centrale. Saluta e rivolgiti prima alla persona più alta in grado.",
+      meetings: "Iniziano spesso con una vera conversazione conviviale davanti a un caffè. Possono essere formali in contesti ufficiali ma flessibili sull'orario in quelli informali. Una discussione espressiva e vivace è normale; le interruzioni fanno parte del ritmo, non della maleducazione. Conferma con chiarezza le decisioni, perché l'accordo verbale ha valore."
+    }
+  },
+  tr: {
+    tagline: "Caloroso, guidato dalla relazione e gerarchico — la comunicazione è ad alto contesto.",
+    note: "La Turchia fa da ponte tra le norme d'affari europee e mediorientali; la cultura aziendale di Istanbul può apparire più occidentale, mentre relazioni, gerarchia e ospitalità restano centrali ovunque.",
+    scenarios: {
+      firstMeeting: "Prima la relazione e il calore. Aspettati tè o caffè e una vera conversazione personale prima dell'affare — questo rito fa parte dell'accordo, non è una chiacchiera da sbrigare. Il rispetto per età e anzianità si segnala presto; saluta e rivolgiti prima alla persona più alta in grado, con il titolo.",
+      negotiation: "La fiducia sorregge tutto e richiede tempo; aspettati una fase di relazione e più incontri. La contrattazione è attesa ed espressiva. Una risposta morbida o indiretta può mascherare un «no». Le decisioni vengono dall'alto — assicurati che il vero decisore sia presente.",
+      feedback: "Indiretto, per proteggere armonia e faccia. La critica diretta — soprattutto in pubblico o verso un senior — è mal accolta. Dai ciò che è critico in privato, con delicatezza, avvolto nel rispetto. Leggi l'implicito quanto il detto.",
+      email: "Formale e rispettosa di grado e titolo. Un'inquadratura relazionale calda aiuta; la pura schiettezza può risultare brusca. Per l'importante si preferisce di persona o una chiamata, con l'e-mail a confermare dopo.",
+      hierarchy: "Fortemente gerarchico (alta distanza dal potere). La figura senior è spesso un'autorità paterna; il potere è centralizzato e i junior si aspettano indicazioni anziché contestare apertamente. Fai passare le richieste dal livello giusto e mostra rispetto visibile per la posizione.",
+      meetings: "Le voci senior guidano; i junior possono tacere per rispetto. Calde, espressive e orientate alla relazione, con orari flessibili. L'armonia è protetta, il disaccordo aperto è attenuato — le vere posizioni possono emergere dopo, in privato. L'ospitalità incornicia l'intero incontro."
+    }
+  },
+  cn: {
+    tagline: "Relazione (guanxi) e faccia sono centrali; la comunicazione è ad alto contesto.",
+    scenarios: {
+      firstMeeting: "Prima la relazione e il rispetto. Scambia i biglietti da visita con entrambe le mani e un momento di attenzione. Rispetta il grado in modo visibile. Pazienza e una visione di lungo periodo segnalano serietà.",
+      negotiation: "Fiducia e guanxi (reti di relazioni) sorreggono tutto. Aspettati una fase di relazione più lenta. Evita di far perdere la faccia a chiunque. Le decisioni vengono dall'alto e possono richiedere tempo; la pazienza è strategica.",
+      feedback: "Molto indiretto. Salvare la faccia è fondamentale — non criticare mai qualcuno davanti ad altri. Il messaggio negativo è implicito, delegato, o dato in privato e con delicatezza. Decifra silenzio ed esitazione.",
+      email: "Formale e rispettosa del grado. La schiettezza può apparire aggressiva. Calore relazionale e cortesia contano. Le risposte possono passare per la gerarchia.",
+      hierarchy: "Fortemente gerarchico. Grado e posizione impongono un netto rispetto. Le decisioni scendono dal vertice; i junior contraddicono di rado i senior apertamente. Rivolgiti al livello giusto.",
+      meetings: "Le figure senior parlano e decidono; i junior osservano. L'armonia è protetta nella stanza. «Sì» può significare presa d'atto, non accordo. Le vere decisioni si prendono spesso fuori dalla riunione."
+    }
+  },
+  jp: {
+    tagline: "Guidato dal consenso, ad alto contesto e molto attento ad armonia e faccia.",
+    scenarios: {
+      firstMeeting: "Formale e rispettoso. I biglietti (meishi) si scambiano con entrambe le mani e si osservano con rispetto. La puntualità è essenziale. Silenzi e pause sono comodi e significativi — non affrettarti a riempirli.",
+      negotiation: "Basata sul consenso (nemawashi — un lavoro preparatorio discreto prima delle decisioni). Aspettati un processo lento e accurato con molti interlocutori. Armonia e faccia sono protette. Una risposta morbida può mascherare un «no» fermo.",
+      feedback: "Estremamente indiretto. La critica diretta è evitata per preservare armonia e faccia. Le riserve sono accennate o sollevate in privato tramite intermediari. Il non detto può contare più del detto.",
+      email: "Formale, cortese e curata. Umiltà e formule di cortesia corrette contano. La bruschezza stona. Aspettati risposte ponderate anziché immediate.",
+      hierarchy: "Fortemente gerarchico e basato sull'anzianità. La deferenza verso grado ed età è netta. Le decisioni richiedono un ampio allineamento interno prima di essere formulate.",
+      meetings: "Spesso per confermare decisioni già plasmate a monte. Il silenzio segnala riflessione, non vuoto. Il disaccordo aperto è raro nella stanza. L'armonia è attivamente protetta."
+    }
+  },
+  ae: {
+    tagline: "Basato sulla relazione e sull'onore, gerarchico, con calorosa ospitalità.",
+    scenarios: {
+      firstMeeting: "Prima l'ospitalità e il legame personale — accetta tè/caffè, lascia spazio a generose chiacchiere. Il rispetto per anzianità e status è importante. Le relazioni precedono e sopravvivono a qualsiasi singolo accordo.",
+      negotiation: "Fiducia e relazione personale sono il fondamento. Aspettati una fase di relazione prima della sostanza. La pazienza conta; le tempistiche sono flessibili. Le decisioni spettano a figure senior e non si possono forzare.",
+      feedback: "Indiretto e attento all'onore. Non criticare mai in pubblico — fa perdere la faccia. I punti critici si sollevano in privato, con delicatezza, tramite relazioni di fiducia.",
+      email: "Cortese, rispettosa di titoli e grado. Un'inquadratura relazionale calda aiuta. La schiettezza senza relazione può apparire brusca.",
+      hierarchy: "Fortemente gerarchico; status, età e posizione impongono rispetto. Le decisioni vengono dall'alto. Rivolgiti ai senior in modo appropriato e passa dal livello giusto.",
+      meetings: "Possono iniziare tardi e svolgersi con flessibilità; le interruzioni (chiamate, conversazioni a lato) capitano e non sono maleducate. Le figure senior guidano. Il calore relazionale sorregge i risultati."
+    }
+  },
+  br: {
+    tagline: "Caloroso, espressivo, profondamente guidato dalla relazione, con tempo flessibile.",
+    scenarios: {
+      firstMeeting: "Caloroso, personale ed espressivo. Chiacchiere generose e un interesse personale autentico costruiscono la fiducia su cui poggia l'affare. La vicinanza fisica (distanza ridotta, tocco sul braccio) è normale.",
+      negotiation: "Le relazioni sono tutto — si fanno affari con chi si apprezza e di cui ci si fida. Aspettati una costruzione della fiducia più lenta e più calorosa. Flessibilità e pazienza aiutano. Approcci puramente transazionali appaiono freddi e si arenano.",
+      feedback: "Indiretto e protettivo della relazione. La critica è smorzata e data in privato. Preservare calore e dignità conta più della franchezza.",
+      email: "Calda, personale e amichevole. I segnali relazionali contano quanto il contenuto. La formalità si allenta in fretta una volta stabilito il legame.",
+      hierarchy: "Gerarchico; anzianità e autorità personale contano. Le decisioni si concentrano al vertice, e i legami personali con chi decide pesano.",
+      meetings: "Vivaci, sociali e flessibili sull'orario. Sovrapposizioni di voci e animazione sono coinvolgimento. La costruzione della relazione precede spesso il vero ordine del giorno."
+    }
+  },
+  nl: {
+    tagline: "Eccezionalmente diretto ed egualitario — la franchezza è una virtù.",
+    scenarios: {
+      firstMeeting: "Amichevole, informale e presto al punto. Nomi di battesimo comuni. Poca gerarchia in mostra. La franchezza è normale e benvenuta — non scambiarla per maleducazione.",
+      negotiation: "Molto diretto e guidato dal contenuto. Aspettati un disaccordo aperto e schietto e una forte inclinazione egualitaria — chiunque può contestare chiunque. Le decisioni sono consensuali («modello polder»), quindi l'adesione conta.",
+      feedback: "Tra i più diretti al mondo. La critica è esplicita, immediata e senza fronzoli — e non personale. Smorzarla troppo può offuscare del tutto il tuo messaggio.",
+      email: "Diretta, concisa e poco cerimoniosa. Di' esattamente ciò che pensi. Un eccesso di cortesia può sembrare evasivo.",
+      hierarchy: "Molto egualitario. I titoli contano poco; vince l'argomento migliore, a prescindere dal grado. I junior contestano apertamente i senior. Il consenso si cerca in modo ampio.",
+      meetings: "Dibattito aperto ed egualitario. Tutti contribuiscono e il disaccordo si esprime con chiarezza. La ricerca del consenso può richiedere discussione, ma l'adesione è autentica una volta raggiunta."
+    }
+  }
+};
+
+
 /* ============================================================
    CULTURE COMPASS — CONTENT DATASET
    Grounded in: Hofstede's cultural dimensions, Erin Meyer's
@@ -617,46 +1518,36 @@ const TIMING_WORD = { 1: "very punctual", 2: "punctual", 3: "fairly flexible on 
 function frictionPoints(youCode, themCode) {
   const you = CULTURES[youCode].dims;
   const them = CULTURES[themCode].dims;
-  const themName = CULTURES[themCode].name;
-  const points = [];
+  const keys = [];
 
-  // Directness (1-5)
   const dDir = them.directness - you.directness;
-  if (dDir <= -2) points.push(`You're more direct than is typical here. Soften critical points, avoid a flat 'no', and watch for meaning that sits between the lines — bluntness can cost you.`);
-  else if (dDir >= 2) points.push(`They tend to be more direct than you may expect. Take frank feedback at face value, not as aggression, and be more explicit about what you actually need.`);
+  if (dDir <= -2) keys.push('dir_soften');
+  else if (dDir >= 2) keys.push('dir_frank');
 
-  // Context low/mid/high
   const dCtx = CONTEXT_RANK[them.context] - CONTEXT_RANK[you.context];
-  if (dCtx >= 2) points.push(`Communication is higher-context than you're used to — a lot is carried in tone, relationship, and what's left unsaid. Listen for the implied message and confirm understanding gently.`);
-  else if (dCtx <= -2) points.push(`They rely on explicit, spelled-out communication. Don't expect them to read between the lines — say things plainly and completely.`);
+  if (dCtx >= 2) keys.push('ctx_high');
+  else if (dCtx <= -2) keys.push('ctx_low');
 
-  // Hierarchy (1-5)
   const dHier = them.hierarchy - you.hierarchy;
-  if (dHier >= 2) points.push(`Hierarchy matters more here than in your default. Show visible respect for seniority and titles, greet the most senior person first, and route decisions through the right level.`);
-  else if (dHier <= -2) points.push(`This is flatter than you may assume. Titles carry little weight; juniors may challenge openly and expect to be heard. Don't lean on rank — the best argument wins.`);
+  if (dHier >= 2) keys.push('hier_more');
+  else if (dHier <= -2) keys.push('hier_less');
 
-  // Timing (1-5)
   const dTime = them.timing - you.timing;
-  if (dTime >= 2) points.push(`Time is handled more fluidly than you'd expect (${TIMING_WORD[them.timing]}). Build in slack, don't read a late start as disrespect, and let relationship-building take the time it needs.`);
-  else if (dTime <= -2) points.push(`Punctuality and schedules are taken more strictly here. Be on time to the minute and keep to the agenda — running late or loose reads as unprofessional.`);
+  if (dTime >= 2) keys.push('time_fluid');
+  else if (dTime <= -2) keys.push('time_strict');
 
-  // Trust basis
   if (you.trust !== them.trust) {
-    if (them.trust === "relationship") points.push(`Trust here is built through personal relationship, not just reliable delivery. Invest in rapport first — accept the coffee, the small talk, the slower start. The deal follows the relationship.`);
-    else points.push(`Trust here is earned mainly through competent, reliable delivery rather than personal closeness. Let consistent follow-through — not warmth — do the work; over-familiarity can feel beside the point.`);
+    keys.push(them.trust === "relationship" ? 'trust_rel' : 'trust_task');
   }
 
-  // Decision style
   if (you.decisions !== them.decisions) {
-    if (them.decisions === "top-down") points.push(`Decisions concentrate at the top. Make sure the actual decision-maker is engaged; buy-in from your peer-level contact may not be enough to move things.`);
-    else if (them.decisions === "consensus") points.push(`Decisions need broad buy-in, not just the boss's yes. Expect a slower process and involve stakeholders early — a decision without consensus tends to stall.`);
-    else if (them.decisions === "structured") points.push(`Decisions follow careful analysis. Come with thorough data and detail; pushing for a fast, gut-feel 'yes' will work against you.`);
+    if (them.decisions === "top-down") keys.push('dec_top');
+    else if (them.decisions === "consensus") keys.push('dec_cons');
+    else if (them.decisions === "structured") keys.push('dec_struct');
   }
 
-  if (points.length === 0) {
-    points.push(`Your default style and theirs are broadly aligned on the big dimensions — fewer structural surprises. Still read the individual: personality and background vary widely within any culture.`);
-  }
-  return points;
+  if (keys.length === 0) keys.push('aligned');
+  return keys;
 }
 
 /* The anti-stereotype "off-ramp" variables — shown in every brief. */
@@ -673,29 +1564,51 @@ const OFF_RAMP = [
 
 </script>
 <script>
+/* Localized country names per language (proper nouns). EN pulled from CULTURES. */
+const NAME_I18N = {
+  de: { ch:"Schweiz", de:"Deutschland", fr:"Frankreich", it:"Italien", uk:"Vereinigtes Königreich", us:"USA", in:"Indien", pt:"Portugal", es:"Spanien", cn:"China", jp:"Japan", ae:"Vereinigte Arabische Emirate", br:"Brasilien", nl:"Niederlande", al:"Albanien", tr:"Türkei" },
+  fr: { ch:"Suisse", de:"Allemagne", fr:"France", it:"Italie", uk:"Royaume-Uni", us:"États-Unis", in:"Inde", pt:"Portugal", es:"Espagne", cn:"Chine", jp:"Japon", ae:"Émirats arabes unis", br:"Brésil", nl:"Pays-Bas", al:"Albanie", tr:"Turquie" },
+  it: { ch:"Svizzera", de:"Germania", fr:"Francia", it:"Italia", uk:"Regno Unito", us:"Stati Uniti", in:"India", pt:"Portogallo", es:"Spagna", cn:"Cina", jp:"Giappone", ae:"Emirati Arabi Uniti", br:"Brasile", nl:"Paesi Bassi", al:"Albania", tr:"Turchia" }
+};
+</script>
+<script>
 (function () {
-  const state = { culture: null, you: "", scenario: null };
+  const state = { culture: null, you: "", scenario: null, lang: "en" };
   const cultcontainer = document.getElementById('cultures');
   const scencontainer = document.getElementById('scenarios');
   const youSelect = document.getElementById('youSelect');
+  const langSelect = document.getElementById('langSelect');
   const briefEl = document.getElementById('brief');
 
-  // Flat, alphabetical-by-name culture list
+  // ---- language helpers ----
+  const t = () => I18N[state.lang];
+  const cultureName = (code) => (state.lang === 'en')
+      ? CULTURES[code].name
+      : (NAME_I18N[state.lang][code] || CULTURES[code].name);
+  const scenLabel = (key) => SCEN_I18N[state.lang][key][0];
+  const scenBlurb = (key) => SCEN_I18N[state.lang][key][1];
+  const dimMeta = (k) => DIM_I18N[state.lang][k];
+  const dimSource = (k) => DIM_META[k].source; // framework tags are language-neutral
+  const content = (code) => {
+    if (state.lang === 'en') return { tagline: CULTURES[code].tagline, note: CULTURES[code].note || null, scenarios: CULTURES[code].scenarios };
+    const map = { de: CONTENT_DE, fr: CONTENT_FR, it: CONTENT_IT }[state.lang];
+    return map[code];
+  };
+
+  // Flat, alphabetical-by-name culture list (English proper-noun order is stable)
   const codes = Object.keys(CULTURES).sort((a,b) =>
     CULTURES[a].name.localeCompare(CULTURES[b].name));
 
   // Build chips
   codes.forEach(code => {
-    const c = CULTURES[code];
     const btn = document.createElement('button');
     btn.className = 'chip';
     btn.setAttribute('data-code', code);
-    btn.innerHTML = `<span class="flag">${FLAGS[code]}</span><span>${c.name}</span>`;
+    btn.innerHTML = `<span class="flag">${FLAGS[code]}</span><span class="cname">${cultureName(code)}</span>`;
     btn.addEventListener('click', () => selectCulture(code));
     cultcontainer.appendChild(btn);
-    // populate "you" dropdown (native <option> can't render SVG, so text only)
     const opt = document.createElement('option');
-    opt.value = code; opt.textContent = c.name;
+    opt.value = code; opt.textContent = cultureName(code);
     youSelect.appendChild(opt);
   });
 
@@ -704,7 +1617,7 @@ const OFF_RAMP = [
     const btn = document.createElement('button');
     btn.className = 'scen';
     btn.setAttribute('data-scen', s.key);
-    btn.innerHTML = `<div class="top"><span class="icon">${s.icon}</span><span class="name">${s.label}</span></div><div class="blurb">${s.blurb}</div>`;
+    btn.innerHTML = `<div class="top"><span class="icon">${s.icon}</span><span class="name">${scenLabel(s.key)}</span></div><div class="blurb">${scenBlurb(s.key)}</div>`;
     btn.addEventListener('click', () => selectScenario(s.key));
     scencontainer.appendChild(btn);
   });
@@ -713,8 +1626,7 @@ const OFF_RAMP = [
     state.culture = code;
     document.querySelectorAll('.chip').forEach(el =>
       el.classList.toggle('active', el.getAttribute('data-code') === code));
-    document.getElementById('hint1').textContent = CULTURES[code].name;
-    // if "you" equals the target, clear it (comparing a culture to itself is pointless)
+    document.getElementById('hint1').textContent = cultureName(code);
     if (state.you === code) { state.you = ""; youSelect.value = ""; }
     render();
   }
@@ -724,30 +1636,78 @@ const OFF_RAMP = [
       el.classList.toggle('active', el.getAttribute('data-scen') === key));
     render();
   }
-  youSelect.addEventListener('change', e => {
-    state.you = e.target.value;
+  youSelect.addEventListener('change', e => { state.you = e.target.value; render(); });
+
+  langSelect.addEventListener('change', e => {
+    state.lang = e.target.value;
+    document.documentElement.lang = state.lang;
+    applyStatic();
+    relabelDynamic();
     render();
   });
 
+  // Apply all static chrome strings for current language
+  function applyStatic() {
+    const L = t();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('brandName', L.brand);
+    set('h1', L.h1);
+    set('lede', L.lede);
+    set('framingBold', L.framingBold);
+    set('framingText', L.framing);
+    set('step1', L.step1);
+    set('step1sub', L.step1sub);
+    set('hint1', state.culture ? cultureName(state.culture) : L.step1hint);
+    set('step2', L.step2);
+    set('step2opt', L.step2optional);
+    set('step2sub', L.step2sub);
+    set('myPerspective', L.myPerspective);
+    set('step3', L.step3);
+    set('hint3', L.step3hint);
+    set('footer', L.footer);
+    // neutral/skip option label
+    youSelect.options[0].textContent = L.neutralSkip;
+    langSelect.setAttribute('aria-label', L.langLabel);
+  }
+
+  // Re-label chips, scenario cards, and the you-dropdown options when language changes
+  function relabelDynamic() {
+    document.querySelectorAll('.chip').forEach(el => {
+      const code = el.getAttribute('data-code');
+      const span = el.querySelector('.cname');
+      if (span) span.textContent = cultureName(code);
+    });
+    document.querySelectorAll('.scen').forEach(el => {
+      const key = el.getAttribute('data-scen');
+      el.querySelector('.name').textContent = scenLabel(key);
+      el.querySelector('.blurb').textContent = scenBlurb(key);
+    });
+    // you dropdown options (skip index 0 = neutral)
+    Array.from(youSelect.options).forEach(opt => {
+      if (opt.value) opt.textContent = cultureName(opt.value);
+    });
+  }
+
   function dimReadout(dims, youDims) {
+    const L = t();
     const rows = [];
     const hasYou = !!youDims;
     [['directness'],['hierarchy'],['timing']].forEach(([k]) => {
-      const meta = DIM_META[k]; const v = dims[k];
+      const meta = dimMeta(k); const v = dims[k];
       const themPct = (v - 1) / 4 * 100;
-      const themTag = `<span class="marker-tag them" style="left:${themPct}%">${hasYou ? 'Them' : ''}</span>`;
+      const themTag = `<span class="marker-tag them" style="left:${themPct}%">${hasYou ? L.them : ''}</span>`;
       let youMarker = '', youTag = '';
       if (hasYou) {
         const yv = youDims[k];
         const youPct = (yv - 1) / 4 * 100;
         const overlap = Math.abs(youPct - themPct) < 9;
         youMarker = `<span class="scale-you" style="left:${youPct}%"></span>`;
-        youTag = `<span class="marker-tag you" style="left:${youPct}%; top:${overlap ? '-16px' : '-2px'}">You</span>`;
+        youTag = `<span class="marker-tag you" style="left:${youPct}%; top:${overlap ? '-16px' : '-2px'}">${L.you}</span>`;
       }
       rows.push(`
         <div class="dim">
-          <div class="dim-row"><span class="dim-label">${meta.label}</span><span class="dim-src">${meta.source}</span></div>
-          <div class="dim-val">${meta.describe(v)}</div>
+          <div class="dim-row"><span class="dim-label">${meta.label}</span><span class="dim-src">${dimSource(k)}</span></div>
+          <div class="dim-val">${meta.scale[v-1]}</div>
           <div class="scale-wrap">
             <div class="scale-track">
               <div class="scale-fill" style="width:${themPct}%"></div>
@@ -760,10 +1720,10 @@ const OFF_RAMP = [
         </div>`);
     });
     [['context'],['decisions'],['trust']].forEach(([k]) => {
-      const meta = DIM_META[k]; const v = dims[k];
+      const meta = dimMeta(k); const v = dims[k];
       rows.push(`
         <div class="dim">
-          <div class="dim-row"><span class="dim-label">${meta.label}</span><span class="dim-src">${meta.source}</span></div>
+          <div class="dim-row"><span class="dim-label">${meta.label}</span><span class="dim-src">${dimSource(k)}</span></div>
           <div class="dim-val" style="margin-bottom:0">${meta.map[v]}</div>
         </div>`);
     });
@@ -772,59 +1732,68 @@ const OFF_RAMP = [
 
   function frictionBlock() {
     if (!state.you || state.you === state.culture) return '';
-    const pts = frictionPoints(state.you, state.culture);
+    const L = t();
+    const keys = frictionPoints(state.you, state.culture);
+    const phrases = FRICTION_I18N[state.lang];
     const youC = CULTURES[state.you];
     return `
       <div class="friction">
         <div class="friction-h">
-          <span>◆ How to adjust your approach</span>
-          <span class="persp">your lens: ${youC.flag} ${youC.name}</span>
+          <span>◆ ${L.frictionTitle}</span>
+          <span class="persp">${L.yourLens} ${FLAGS[state.you] ? '' : ''}${cultureName(state.you)}</span>
         </div>
         <div class="friction-list">
-          ${pts.map(p => `<div class="friction-item"><span class="arrow">→</span><span>${p}</span></div>`).join('')}
+          ${keys.map(k => `<div class="friction-item"><span class="arrow">→</span><span>${phrases[k]}</span></div>`).join('')}
         </div>
       </div>`;
   }
 
   function render() {
+    const L = t();
     if (!state.culture || !state.scenario) {
-      briefEl.innerHTML = `<div class="empty"><b>Your brief will appear here.</b>Choose who you're dealing with and the situation.</div>`;
+      briefEl.innerHTML = `<div class="empty"><b>${L.emptyTitle}</b>${L.emptyBody}</div>`;
       return;
     }
-    const c = CULTURES[state.culture];
-    const s = SCENARIOS.find(x => x.key === state.scenario);
-    const guide = c.scenarios[state.scenario];
+    const co = content(state.culture);
+    const cflag = FLAGS[state.culture];
+    const cname = cultureName(state.culture);
+    const sLabel = scenLabel(state.scenario);
+    const sIcon = SCENARIOS.find(x => x.key === state.scenario).icon;
+    const guide = co.scenarios[state.scenario];
     const youDims = (state.you && state.you !== state.culture) ? CULTURES[state.you].dims : null;
-    const noteHTML = c.note ? `<div class="brief-note"><b>Worth knowing.</b> ${c.note}</div>` : '';
+    const noteHTML = co.note ? `<div class="brief-note"><b>${L.worthKnowing}</b> ${co.note}</div>` : '';
+    const offList = OFFRAMP_I18N[state.lang];
 
     briefEl.innerHTML = `
       <div class="brief-card">
         <div class="brief-top">
           <div class="brief-crumb">
-            <span>${s.icon} ${s.label}</span><span class="sep">with</span><b>${c.flag} ${c.name}</b>
+            <span>${sIcon} ${sLabel}</span><span class="sep">${L.withWord}</span><b><span class="flag inline">${cflag}</span> ${cname}</b>
           </div>
-          <div class="brief-title">${s.label} · ${c.name}</div>
-          <div class="brief-tagline">${c.tagline}</div>
+          <div class="brief-title">${sLabel} · ${cname}</div>
+          <div class="brief-tagline">${co.tagline}</div>
         </div>
         <div class="brief-body">
           <p class="brief-guide">${guide}</p>
           ${noteHTML}
           ${frictionBlock()}
           <div class="dims">
-            <div class="dims-h">The cultural read</div>
-            ${youDims ? `<div class="legend"><span><span class="d them"></span>Them (${c.name})</span><span><span class="d you"></span>You (${CULTURES[state.you].name})</span></div>` : ''}
-            ${dimReadout(c.dims, youDims)}
+            <div class="dims-h">${L.culturalRead}</div>
+            ${youDims ? `<div class="legend"><span><span class="d them"></span>${L.them} (${cname})</span><span><span class="d you"></span>${L.you} (${cultureName(state.you)})</span></div>` : ''}
+            ${dimReadout(CULTURES[state.culture].dims, youDims)}
           </div>
           <div class="offramp">
-            <div class="offramp-h">◆ Before you apply any of this</div>
-            <p>The more of these that describe the person, the less their nationality predicts. Use the brief to prepare — then adjust fast to who's actually in front of you.</p>
-            <ul>${OFF_RAMP.map(o => `<li>${o}</li>`).join('')}</ul>
+            <div class="offramp-h">◆ ${L.offrampTitle}</div>
+            <p>${L.offrampIntro}</p>
+            <ul>${offList.map(o => `<li>${o}</li>`).join('')}</ul>
           </div>
         </div>
       </div>`;
     briefEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  // init
+  applyStatic();
   render();
 })();
 </script>
